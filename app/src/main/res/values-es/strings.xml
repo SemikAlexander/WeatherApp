@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WeatherApp</string>
+    <string name="sunrise">Amanecer</string>
+    <string name="sunset">Puesta de sol</string>
+    <string name="wind">Viento</string>
+    <string name="pressure">Presión</string>
+    <string name="humidity">Humedad</string>
+    <string name="created_by">Creado por</string>
+    <string name="update_data">Actualizado en: %1$s</string>
+    <string name="min_temp">Mín t: %1$s</string>
+    <string name="max_temp">Máx t: %1$s</string>
+    <string name="save_button">Salvar</string>
+</resources>

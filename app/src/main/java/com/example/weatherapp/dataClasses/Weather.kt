@@ -5,7 +5,7 @@ data class Weather(
     val clouds: Clouds?,
     val cod: Any,
     val coord: Coord?,
-    val dt: Int?,
+    val dt: Long?,
     val id: Int?,
     val main: Main?,
     val name: String?,
