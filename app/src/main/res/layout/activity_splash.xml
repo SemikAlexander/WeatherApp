@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SplashActivity"
+    android:background="@color/blue1">
+
+    <RelativeLayout
+        android:layout_width="176dp"
+        android:layout_height="184dp"
+        android:layout_centerInParent="true"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="95dp"
+            android:layout_height="94dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/atmospheric_pressure" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:text="@string/my_app_name"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
+    </RelativeLayout>
+</RelativeLayout>

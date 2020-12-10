@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">WeatherApp</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="sunset">Sunset</string>
+    <string name="wind">Wind</string>
+    <string name="pressure">Pressure</string>
+    <string name="humidity">Humidity</string>
+    <string name="created_by">Created By</string>
+    <string name="update_data">Updated at: %1$s</string>
+    <string name="min_temp">Min t: %1$s</string>
+    <string name="max_temp">Max t: %1$s</string>
+    <string name="my_app_name">Weather forecast</string>
 </resources>

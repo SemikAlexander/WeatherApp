@@ -1,9 +1,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="25dp"
     android:background="@color/blue1">
+
+    <ImageButton
+        android:layout_alignRight="@+id/mainContainer"
+        android:id="@+id/synchronizeImageButton"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_gravity="right"
+        android:background="@color/blue1"
+        app:srcCompat="@drawable/synchronize" />
 
     <RelativeLayout android:id="@+id/mainContainer" android:layout_width="match_parent"
         android:layout_height="match_parent" android:visibility="visible">
@@ -11,23 +21,27 @@
         <LinearLayout android:id="@+id/addressContainer" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:orientation="vertical"
             android:gravity="center">
+
             <LinearLayout
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <EditText android:id="@+id/city"
+                <AutoCompleteTextView android:id="@+id/city"
                     android:backgroundTint="@color/blue1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
+                    android:minWidth="160dp"
                     android:textSize="24dp"
-                    android:text="DONETSK"/>
+                    android:gravity="center"
+                    android:text="London"/>
+
                 <TextView android:id="@+id/country"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:textSize="24dp"
-                    android:text="UA"/>
+                    android:text="GB"/>
             </LinearLayout>
 
 
@@ -36,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-                android:text="01 December 2020, 20:06 PM"
+                android:text="@string/update_data"
                 android:textSize="14dp" />
 
         </LinearLayout>
@@ -61,14 +75,25 @@
                 android:textColor="@color/white"
                 android:textSize="90dp" />
 
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:orientation="horizontal" android:gravity="center">
-                <TextView android:id="@+id/temp_min" android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:textColor="@color/white" android:text="Min Temp: 05:05 AM"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+                <TextView
+                    android:id="@+id/temp_min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:text="@string/min_temp"/>
                 <Space android:layout_width="50dp" android:layout_height="wrap_content" android:textColor="@color/white"/>
 
-                <TextView android:id="@+id/temp_max" android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:textColor="@color/white" android:text="Max Temp: 05:05 PM"/>
+                <TextView
+                    android:id="@+id/temp_max"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:text="@string/max_temp"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -83,11 +108,20 @@
                     android:orientation="vertical" android:layout_weight="1"
                     android:gravity="center" android:padding="8dp"
                     android:background="#3CF1EBF1">
-                    <ImageView android:layout_width="25dp" android:layout_height="25dp"
-                        android:src="@drawable/sunrise" android:tint="#FFFFFF"/>
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/sunrise"
+                        android:tint="#FFFFFF"/>
                     <Space android:layout_width="wrap_content" android:layout_height="5dp"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:textSize="12dp" android:text="Sunrise" android:textColor="@color/white"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12dp"
+                        android:text="@string/sunrise"
+                        android:textColor="@color/white"/>
+
                     <TextView android:id="@+id/sunrise" android:layout_width="wrap_content"
                         android:layout_height="wrap_content" android:textSize="14dp" android:textColor="@color/white"
                         android:text="06:40 AM"/>
@@ -100,8 +134,12 @@
                     <ImageView android:layout_width="25dp" android:layout_height="25dp"
                         android:src="@drawable/sunset" android:tint="#FFFFFF"/>
                     <Space android:layout_width="wrap_content" android:layout_height="5dp"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:textSize="12dp" android:text="Sunset" android:textColor="@color/white"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12dp"
+                        android:text="@string/sunset"
+                        android:textColor="@color/white"/>
                     <TextView android:id="@+id/sunset" android:layout_width="wrap_content"
                         android:layout_height="wrap_content" android:textSize="14dp" android:textColor="@color/white"
                         android:text="06:40 AM"/>
@@ -114,11 +152,18 @@
                     <ImageView android:layout_width="25dp" android:layout_height="25dp"
                         android:src="@drawable/wind" android:tint="#FFFFFF"/>
                     <Space android:layout_width="wrap_content" android:layout_height="5dp"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:textSize="12dp" android:text="Wind" android:textColor="@color/white"/>
-                    <TextView android:id="@+id/wind" android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" android:textSize="14dp"
-                        android:textColor="@color/white" android:text="06:40 AM"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12dp"
+                        android:text="@string/wind"
+                        android:textColor="@color/white"/>
+                    <TextView android:id="@+id/wind"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14dp"
+                        android:textColor="@color/white"
+                        android:text="06:40 AM"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -130,11 +175,20 @@
                     android:orientation="vertical" android:layout_weight="1"
                     android:gravity="center" android:padding="8dp"
                     android:background="#3CF1EBF1">
-                    <ImageView android:layout_width="25dp" android:layout_height="25dp"
-                        android:src="@drawable/pressure" android:tint="#FFFFFF"/>
-                    <Space android:layout_width="wrap_content" android:layout_height="5dp"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:textSize="12dp" android:textColor="@color/white" android:text="Pressure"/>
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/pressure"
+                        android:tint="#FFFFFF"/>
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="5dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12dp"
+                        android:textColor="@color/white"
+                        android:text="@string/pressure"/>
                     <TextView android:id="@+id/pressure" android:layout_width="wrap_content"
                         android:layout_height="wrap_content" android:textSize="14dp"
                         android:textColor="@color/white" android:text="06:40 AM"/>
@@ -144,11 +198,19 @@
                     android:orientation="vertical" android:layout_weight="1"
                     android:gravity="center" android:padding="8dp"
                     android:background="#3CF1EBF1">
-                    <ImageView android:layout_width="25dp" android:layout_height="25dp"
-                        android:src="@drawable/humidity" android:tint="#FFFFFF"/>
-                    <Space android:layout_width="wrap_content" android:layout_height="5dp"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:textColor="@color/white" android:textSize="12dp" android:text="Humidity"/>
+                    <ImageView android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/humidity"
+                        android:tint="#FFFFFF"/>
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="5dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textSize="12dp"
+                        android:text="@string/humidity"/>
                     <TextView android:id="@+id/humidity" android:layout_width="wrap_content"
                         android:layout_height="wrap_content" android:textSize="14dp"
                         android:textColor="@color/white" android:text="06:40 AM"/>
@@ -161,11 +223,18 @@
                     <ImageView android:layout_width="25dp" android:layout_height="25dp"
                         android:src="@drawable/info" android:tint="#FFFFFF"/>
                     <Space android:layout_width="wrap_content" android:layout_height="5dp"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:textColor="@color/white" android:textSize="12dp" android:text="Created By"/>
-                    <TextView android:id="@+id/about" android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" android:textSize="14dp"
-                        android:textColor="@color/white" android:text="alex.prog.99"/>
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textSize="12dp"
+                        android:text="@string/created_by"/>
+                    <TextView
+                        android:id="@+id/about"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14dp"
+                        android:textColor="@color/white"
+                        android:text="alex.prog.99"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
