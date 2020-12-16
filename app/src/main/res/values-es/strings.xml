@@ -11,4 +11,6 @@
     <string name="min_temp">Mín t: %1$s</string>
     <string name="max_temp">Máx t: %1$s</string>
     <string name="save_button">Salvar</string>
+    <string name="change_data">¡Datos meteorológicos actualizados!</string>
+    <string name="lang_app">Lengua</string>
 </resources>

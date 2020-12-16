@@ -25,9 +25,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val UACities = arrayOf("Aberdeen", "Aldershot", "Altrincham", "Ashford", "Atherton", "Aylesbury", "Bamber Bridge", "Bangor", "Barnsley", "Barry", "Basildon", "Basingstoke", "Bath", "Batley", "Bebington", "Bedford", "Beeston", "Belfast", "Birkenhead", "Birmingham", "Blackburn", "Blackpool", "Bloxwich", "Bognor Regis", "Bolton", "Bootle", "Bournemouth", "Bracknell", "Bradford", "Brentwood", "Brighton and Hove", "Bristol", "Burnley", "Burton upon Trent", "Bury", "Cambridge", "Milton", "Cannock", "Canterbury", "Cardiff", "Carlisle", "Carlton", "Chatham", "Chelmsford", "Cheltenham", "Chester", "Chesterfield", "Christchurch", "Clacton-on-Sea", "Colchester", "Corby", "Coventry", "Craigavon", "incl. Lurgan, Portadown", "Crawley", "Crewe", "Crosby", "Cumbernauld", "Darlington", "Derby", "Derry", "Londonderry", "Dewsbury", "Doncaster", "Dudley", "Dundee", "Dunfermline", "Durham", "Eastbourne", "East Kilbride", "Eastleigh", "Edinburgh", "Ellesmere Port", "Esher", "Ewell", "Exeter", "Farnborough", "Filton", "Folkestone", "Gateshead", "Gillingham", "Glasgow", "Gloucester", "Gosport", "Gravesend", "Grays", "Grimsby", "Guildford", "Halesowen", "Halifax", "Hamilton", "Harlow", "Harrogate", "Hartlepool", "Hastings", "Hemel Hempstead", "Hereford", "High Wycombe", "Horsham", "Huddersfield", "Ipswich", "Keighley", "Kettering", "Kidderminster", "Kingston upon Hull", "Hull", "Kingswinford", "Kirkcaldy", "Lancaster", "Leeds", "Leicester", "Lincoln", "Littlehampton", "Liverpool", "Livingston", "London", "Loughborough", "Lowestoft", "Luton", "Macclesfield", "Maidenhead", "Maidstone", "Manchester", "Mansfield", "Margate", "Middlesbrough", "Milton Keynes", "Neath", "Newcastle", "Newcastle upon Tyne", "Newcastle-under-Lyme", "Newport", "Newtownabbey", "Northampton", "Norwich", "Nottingham", "Nuneaton", "Oldham", "Oxford", "Paignton", "Paisley", "Peterborough", "Plymouth", "Poole", "Portsmouth", "Preston", "Rayleigh", "Reading", "Redditch", "Rochdale", "Rochester", "Rotherham", "Royal Leamington Spa", "Royal Tunbridge Wells", "Rugby", "Runcorn", "Sale", "Salford", "Scarborough", "Scunthorpe", "Sheffield", "Shoreham-by-Sea", "Shrewsbury", "Sittingbourne", "Slough", "Smethwick", "Solihull", "Southampton", "Southend-on-Sea", "Southport", "South Shields", "Stafford", "St Albans", "Stevenage", "St Helens", "Stockport", "Stockton-on-Tees", "Stoke-on-Trent", "Stourbridge", "Sunderland", "Sutton Coldfield", "Swansea", "Swindon", "Tamworth", "Taunton", "Telford", "Torquay", "Tynemouth", "Wakefield", "Wallasey", "Walsall", "Walton-on-Thames", "Warrington", "Washington", "Watford", "Wellingborough", "Welwyn Garden City", "West Bromwich", "Weston-super-Mare", "Weymouth", "Widnes", "Wigan", "Willenhall", "Woking", "Wolverhampton", "Worcester", "Worthing", "Wrexham", "York")
+        val GBCities = arrayOf("Aberdeen", "Aldershot", "Altrincham", "Ashford", "Atherton", "Aylesbury", "Bamber Bridge", "Bangor", "Barnsley", "Barry", "Basildon", "Basingstoke", "Bath", "Batley", "Bebington", "Bedford", "Beeston", "Belfast", "Birkenhead", "Birmingham", "Blackburn", "Blackpool", "Bloxwich", "Bognor Regis", "Bolton", "Bootle", "Bournemouth", "Bracknell", "Bradford", "Brentwood", "Brighton and Hove", "Bristol", "Burnley", "Burton upon Trent", "Bury", "Cambridge", "Milton", "Cannock", "Canterbury", "Cardiff", "Carlisle", "Carlton", "Chatham", "Chelmsford", "Cheltenham", "Chester", "Chesterfield", "Christchurch", "Clacton-on-Sea", "Colchester", "Corby", "Coventry", "Craigavon", "incl. Lurgan, Portadown", "Crawley", "Crewe", "Crosby", "Cumbernauld", "Darlington", "Derby", "Derry", "Londonderry", "Dewsbury", "Doncaster", "Dudley", "Dundee", "Dunfermline", "Durham", "Eastbourne", "East Kilbride", "Eastleigh", "Edinburgh", "Ellesmere Port", "Esher", "Ewell", "Exeter", "Farnborough", "Filton", "Folkestone", "Gateshead", "Gillingham", "Glasgow", "Gloucester", "Gosport", "Gravesend", "Grays", "Grimsby", "Guildford", "Halesowen", "Halifax", "Hamilton", "Harlow", "Harrogate", "Hartlepool", "Hastings", "Hemel Hempstead", "Hereford", "High Wycombe", "Horsham", "Huddersfield", "Ipswich", "Keighley", "Kettering", "Kidderminster", "Kingston upon Hull", "Hull", "Kingswinford", "Kirkcaldy", "Lancaster", "Leeds", "Leicester", "Lincoln", "Littlehampton", "Liverpool", "Livingston", "London", "Loughborough", "Lowestoft", "Luton", "Macclesfield", "Maidenhead", "Maidstone", "Manchester", "Mansfield", "Margate", "Middlesbrough", "Milton Keynes", "Neath", "Newcastle", "Newcastle upon Tyne", "Newcastle-under-Lyme", "Newport", "Newtownabbey", "Northampton", "Norwich", "Nottingham", "Nuneaton", "Oldham", "Oxford", "Paignton", "Paisley", "Peterborough", "Plymouth", "Poole", "Portsmouth", "Preston", "Rayleigh", "Reading", "Redditch", "Rochdale", "Rochester", "Rotherham", "Royal Leamington Spa", "Royal Tunbridge Wells", "Rugby", "Runcorn", "Sale", "Salford", "Scarborough", "Scunthorpe", "Sheffield", "Shoreham-by-Sea", "Shrewsbury", "Sittingbourne", "Slough", "Smethwick", "Solihull", "Southampton", "Southend-on-Sea", "Southport", "South Shields", "Stafford", "St Albans", "Stevenage", "St Helens", "Stockport", "Stockton-on-Tees", "Stoke-on-Trent", "Stourbridge", "Sunderland", "Sutton Coldfield", "Swansea", "Swindon", "Tamworth", "Taunton", "Telford", "Torquay", "Tynemouth", "Wakefield", "Wallasey", "Walsall", "Walton-on-Thames", "Warrington", "Washington", "Watford", "Wellingborough", "Welwyn Garden City", "West Bromwich", "Weston-super-Mare", "Weymouth", "Widnes", "Wigan", "Willenhall", "Woking", "Wolverhampton", "Worcester", "Worthing", "Wrexham", "York")
 
-        val adapter = ArrayAdapter<String>(this, layout.support_simple_spinner_dropdown_item, UACities)
+        val adapter = ArrayAdapter<String>(this, layout.support_simple_spinner_dropdown_item, GBCities)
         binding.apply {
             city.setAdapter(adapter)
             city.threshold = 2
@@ -38,10 +38,12 @@ class MainActivity : AppCompatActivity() {
 
             synchronizeImageButton.setOnClickListener {
                 getWeatherForecast(binding.city.text.toString())
+                toast(getString(R.string.change_data))
             }
+
             settingImageButton.setOnClickListener {
                 startActivity<SettingsActivity>()
-                finish()
+                //finish()
             }
         }
 
@@ -100,7 +102,7 @@ class MainActivity : AppCompatActivity() {
 //swipe=refresh-layout
 //onboarding
 //viewpager2
-//localization
+//localization [+]
 
 //dagger
 //rxjava

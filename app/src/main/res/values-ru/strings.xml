@@ -11,4 +11,6 @@
     <string name="min_temp">Мин t: %1$s</string>
     <string name="max_temp">Макс t: %1$s</string>
     <string name="save_button">Сохранить</string>
+    <string name="change_data">Погодные данные обновлены!</string>
+    <string name="lang_app">Язык</string>
 </resources>

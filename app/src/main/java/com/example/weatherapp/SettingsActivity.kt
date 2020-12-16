@@ -2,8 +2,9 @@ package com.example.weatherapp
 
 import android.content.Context
 import android.os.Bundle
-import android.widget.RadioButton
-import android.widget.RadioGroup
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherapp.databinding.ActivitySettingsBinding
 
@@ -17,36 +18,44 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val pref = getSharedPreferences("setting", Context.MODE_PRIVATE)
-        var lan: String = ""
+        val lanStr = pref.getString("language", null)
+        var setLanguage = ""
         val map = mapOf("Español" to "es", "English" to "en", "Русский" to "ru")
+        val values = map.values.toList()
+        val keys = map.keys
+
+        val adapter = ArrayAdapter(this, R.layout.spinner_item, keys.toMutableList())
 
         binding.apply {
-            val lanStr = pref.getString("language", null)
-            if (lanStr != null)
-            {
-                if (lanStr == "en")
-                    enRadioButton.isChecked = true
-                else if(lanStr == "ru")
-                    ruRadioButton.isChecked = true
-                else
-                    esRadioButton.isChecked = true
+            lanSpinner.adapter = adapter
+            lanSpinner.setSelection(values.indexOf(lanStr))
+            lanSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    setLanguage = values[position]
+                }
             }
 
-            radioGroup.setOnCheckedChangeListener(RadioGroup.OnCheckedChangeListener { group, checkedId ->
-                val radio: RadioButton = findViewById(checkedId)
-                lan = radio.text.toString()
-            })
-
             saveButton.setOnClickListener {
-
-                var editor = pref.edit()
-                editor.putString("language", map.getValue(lan))
-                editor.apply()
-
+                if(setLanguage != "") {
+                    var editor = pref.edit()
+                    editor.putString("language", setLanguage)
+                    editor.apply()
+                }
                 startActivity<SplashActivity>()
                 finish()
             }
         }
+    }
 
+    override fun onBackPressed() {
+        //startActivity<MainActivity>()
+        finish()
     }
 }

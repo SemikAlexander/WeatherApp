@@ -10,4 +10,6 @@
     <string name="min_temp">Min t: %1$s</string>
     <string name="max_temp">Max t: %1$s</string>
     <string name="save_button">Save</string>
+    <string name="change_data">Weather data updated!</string>
+    <string name="lang_app">Language</string>
 </resources>
