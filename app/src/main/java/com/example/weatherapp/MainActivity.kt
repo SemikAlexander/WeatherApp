@@ -6,10 +6,12 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doAfterTextChanged
 import com.example.weatherapp.R.layout
 import com.example.weatherapp.api.API
-import com.example.weatherapp.dataClasses.Weather
+import com.example.weatherapp.citiesDataClasses.Cities
 import com.example.weatherapp.databinding.ActivityMainBinding
+import com.example.weatherapp.weatherDataClasses.Weather
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -19,41 +21,50 @@ import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+        private const val DELAY = 1000L
+    }
+
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val GBCities = arrayOf("Aberdeen", "Aldershot", "Altrincham", "Ashford", "Atherton", "Aylesbury", "Bamber Bridge", "Bangor", "Barnsley", "Barry", "Basildon", "Basingstoke", "Bath", "Batley", "Bebington", "Bedford", "Beeston", "Belfast", "Birkenhead", "Birmingham", "Blackburn", "Blackpool", "Bloxwich", "Bognor Regis", "Bolton", "Bootle", "Bournemouth", "Bracknell", "Bradford", "Brentwood", "Brighton and Hove", "Bristol", "Burnley", "Burton upon Trent", "Bury", "Cambridge", "Milton", "Cannock", "Canterbury", "Cardiff", "Carlisle", "Carlton", "Chatham", "Chelmsford", "Cheltenham", "Chester", "Chesterfield", "Christchurch", "Clacton-on-Sea", "Colchester", "Corby", "Coventry", "Craigavon", "incl. Lurgan, Portadown", "Crawley", "Crewe", "Crosby", "Cumbernauld", "Darlington", "Derby", "Derry", "Londonderry", "Dewsbury", "Doncaster", "Dudley", "Dundee", "Dunfermline", "Durham", "Eastbourne", "East Kilbride", "Eastleigh", "Edinburgh", "Ellesmere Port", "Esher", "Ewell", "Exeter", "Farnborough", "Filton", "Folkestone", "Gateshead", "Gillingham", "Glasgow", "Gloucester", "Gosport", "Gravesend", "Grays", "Grimsby", "Guildford", "Halesowen", "Halifax", "Hamilton", "Harlow", "Harrogate", "Hartlepool", "Hastings", "Hemel Hempstead", "Hereford", "High Wycombe", "Horsham", "Huddersfield", "Ipswich", "Keighley", "Kettering", "Kidderminster", "Kingston upon Hull", "Hull", "Kingswinford", "Kirkcaldy", "Lancaster", "Leeds", "Leicester", "Lincoln", "Littlehampton", "Liverpool", "Livingston", "London", "Loughborough", "Lowestoft", "Luton", "Macclesfield", "Maidenhead", "Maidstone", "Manchester", "Mansfield", "Margate", "Middlesbrough", "Milton Keynes", "Neath", "Newcastle", "Newcastle upon Tyne", "Newcastle-under-Lyme", "Newport", "Newtownabbey", "Northampton", "Norwich", "Nottingham", "Nuneaton", "Oldham", "Oxford", "Paignton", "Paisley", "Peterborough", "Plymouth", "Poole", "Portsmouth", "Preston", "Rayleigh", "Reading", "Redditch", "Rochdale", "Rochester", "Rotherham", "Royal Leamington Spa", "Royal Tunbridge Wells", "Rugby", "Runcorn", "Sale", "Salford", "Scarborough", "Scunthorpe", "Sheffield", "Shoreham-by-Sea", "Shrewsbury", "Sittingbourne", "Slough", "Smethwick", "Solihull", "Southampton", "Southend-on-Sea", "Southport", "South Shields", "Stafford", "St Albans", "Stevenage", "St Helens", "Stockport", "Stockton-on-Tees", "Stoke-on-Trent", "Stourbridge", "Sunderland", "Sutton Coldfield", "Swansea", "Swindon", "Tamworth", "Taunton", "Telford", "Torquay", "Tynemouth", "Wakefield", "Wallasey", "Walsall", "Walton-on-Thames", "Warrington", "Washington", "Watford", "Wellingborough", "Welwyn Garden City", "West Bromwich", "Weston-super-Mare", "Weymouth", "Widnes", "Wigan", "Willenhall", "Woking", "Wolverhampton", "Worcester", "Worthing", "Wrexham", "York")
 
-        val adapter = ArrayAdapter<String>(this, layout.support_simple_spinner_dropdown_item, GBCities)
         binding.apply {
-            city.setAdapter(adapter)
+
             city.threshold = 2
-            city.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
-                val selItem = parent.getItemAtPosition(position).toString()
-                getWeatherForecast(selItem)
-            }
 
             synchronizeImageButton.setOnClickListener {
                 getWeatherForecast(binding.city.text.toString())
                 toast(getString(R.string.change_data))
             }
 
+            var timer = Timer()
+            city.doAfterTextChanged {
+                timer.cancel()
+                timer = Timer()
+                timer.schedule(
+                        object : TimerTask() {
+                            override fun run() {
+                                getCity(it.toString())
+                            }
+                        },
+                        DELAY
+                )
+            }
+
             settingImageButton.setOnClickListener {
                 startActivity<SettingsActivity>()
-                //finish()
             }
         }
 
-        val city = binding.city.text.toString()
-
-        getWeatherForecast(city)
+        getWeatherForecast(binding.city.text.toString())
     }
 
     @SuppressLint("SetTextI18n")
-    private fun onDataLoaded(weather: Weather?) {
+    private fun weatherDataLoaded(weather: Weather?) {
         if (weather != null) {
             binding.apply {
                 city.clearFocus()
@@ -73,16 +84,49 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getWeatherForecast(cityName : String) {
+    @SuppressLint("SetTextI18n")
+    private fun cityDataLoaded(cities: Cities?) {
+        if (cities != null) {
+            binding.apply {
+                val citiesNames = cities.map { it.title }.toMutableList()
+                city.setAdapter(ArrayAdapter(
+                        this@MainActivity,
+                        layout.support_simple_spinner_dropdown_item,
+                        citiesNames
+                ))
+
+                city.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
+                    getWeatherForecast(parent.getItemAtPosition(position).toString())
+                }
+            }
+        }
+    }
+
+    private fun getWeatherForecast(cityName: String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 val answer = API.api.getWeather(cityName).execute()
                 launch(Dispatchers.Main) {
-                    onDataLoaded(answer.body())
+                    weatherDataLoaded(answer.body())
                 }
             } catch (e: Exception) {
                 launch(Dispatchers.Main) {
-                    onDataLoaded(null)
+                    weatherDataLoaded(null)
+                }
+            }
+        }
+    }
+
+    private fun getCity(cityName: String) {
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val answer = API.api2.getCities(cityName).execute()
+                launch(Dispatchers.Main) {
+                    cityDataLoaded(answer.body())
+                }
+            } catch (e: Exception) {
+                launch(Dispatchers.Main) {
+                    cityDataLoaded(null)
                 }
             }
         }

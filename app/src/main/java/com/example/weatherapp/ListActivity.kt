@@ -3,8 +3,8 @@ package com.example.weatherapp
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.weatherapp.dataClasses.Post
 import com.example.weatherapp.databinding.ActivityListBinding
+import com.example.weatherapp.weatherDataClasses.Post
 import java.io.Serializable
 
 class ListActivity : AppCompatActivity() {

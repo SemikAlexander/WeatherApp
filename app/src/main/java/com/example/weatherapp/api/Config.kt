@@ -30,3 +30,25 @@ val retrofit by lazy {
             .client(client)
             .build()
 }
+
+val retrofit2 by lazy {
+    //logs
+    val interceptor = HttpLoggingInterceptor()
+    interceptor.level =
+            if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
+            else HttpLoggingInterceptor.Level.NONE
+
+    //timeouts
+    val client = OkHttpClient.Builder()
+            .addInterceptor(interceptor)
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(10, TimeUnit.SECONDS)
+            .build()
+
+    //retrofit
+    Retrofit.Builder()
+            .baseUrl("https://www.metaweather.com/api/location/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .build()
+}

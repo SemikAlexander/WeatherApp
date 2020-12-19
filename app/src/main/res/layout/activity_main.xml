@@ -9,18 +9,20 @@
     <ImageButton
         android:layout_alignRight="@+id/mainContainer"
         android:id="@+id/synchronizeImageButton"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="right"
         android:background="@color/blue1"
+        android:scaleType="centerCrop"
         app:srcCompat="@drawable/synchronize" />
 
     <ImageButton
         android:layout_alignLeft="@+id/mainContainer"
         android:id="@+id/settingImageButton"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:background="@color/blue1"
+        android:scaleType="centerCrop"
         app:srcCompat="@drawable/settings" />
 
     <RelativeLayout android:id="@+id/mainContainer" android:layout_width="match_parent"
@@ -34,7 +36,8 @@
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <AutoCompleteTextView android:id="@+id/city"
+                <AutoCompleteTextView
+                    android:id="@+id/city"
                     android:backgroundTint="@color/blue1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -107,14 +110,23 @@
         </LinearLayout>
 
 
-        <LinearLayout android:id="@+id/detailsContainer" android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:orientation="vertical"
+        <LinearLayout android:id="@+id/detailsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_alignParentBottom="true">
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:orientation="horizontal" android:weightSum="3">
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
-                    android:orientation="vertical" android:layout_weight="1"
-                    android:gravity="center" android:padding="8dp"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="8dp"
                     android:background="#3CF1EBF1">
                     <ImageView
                         android:layout_width="25dp"

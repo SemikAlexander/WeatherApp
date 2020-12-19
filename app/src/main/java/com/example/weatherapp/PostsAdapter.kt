@@ -3,8 +3,8 @@ package com.example.weatherapp
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weatherapp.dataClasses.Post
 import com.example.weatherapp.databinding.ItemPostBinding
+import com.example.weatherapp.weatherDataClasses.Post
 
 class PostsAdapter(
     private val posts: List<Post>

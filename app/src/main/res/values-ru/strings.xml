@@ -13,4 +13,5 @@
     <string name="save_button">Сохранить</string>
     <string name="change_data">Погодные данные обновлены!</string>
     <string name="lang_app">Язык</string>
+    <string name="country_for_weather">Страна</string>
 </resources>
