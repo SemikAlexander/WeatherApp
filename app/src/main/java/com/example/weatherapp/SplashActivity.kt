@@ -10,11 +10,15 @@ import java.util.*
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        val pref = getSharedPreferences("setting", Context.MODE_PRIVATE)
 
+        if (pref.getString("mode", null) == "dark")
+            setTheme(R.style.Theme_WeatherAppNight)
+        else
+            setTheme(R.style.Theme_WeatherApp)
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        val pref = getSharedPreferences("setting", Context.MODE_PRIVATE)
         val lan = pref.getString("language", null)
         if (lan != null)
             setLocale(this, lan)

@@ -14,4 +14,5 @@
     <string name="change_data">¡Datos meteorológicos actualizados!</string>
     <string name="lang_app">Lengua</string>
     <string name="country_for_weather">País</string>
+    <string name="mode_app">Tema oscuro</string>
 </resources>

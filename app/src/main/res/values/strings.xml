@@ -12,5 +12,6 @@
     <string name="save_button">Save</string>
     <string name="change_data">Weather data updated!</string>
     <string name="lang_app">Language</string>
+    <string name="mode_app">Dark theme</string>
     <string name="country_for_weather">Country</string>
 </resources>

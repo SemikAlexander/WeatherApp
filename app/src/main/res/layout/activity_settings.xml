@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SettingsActivity"
-    android:background="@color/blue1">
+    android:background="?attr/colorPrimaryVariant"
+    tools:context=".SettingsActivity">
 
     <Button
         android:id="@+id/saveButton"
@@ -13,7 +13,7 @@
         android:layout_height="68dp"
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
-        android:background="@color/blue2"
+        android:background="?attr/colorPrimary"
         android:text="@string/save_button"
         android:textColor="@color/white"
         android:textSize="24sp"
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_weight="1"
-            android:background="@color/blue1"
+            android:background="?attr/colorPrimaryVariant"
             android:gravity="left"
             android:orientation="horizontal"
             android:padding="8dp"
@@ -52,8 +52,8 @@
                 android:id="@+id/lanTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:gravity="center"
                 android:padding="5dip"
                 android:text="@string/lang_app"
@@ -84,7 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_weight="1"
-            android:background="@color/blue1"
+            android:background="?attr/colorPrimaryVariant"
             android:gravity="left"
             android:orientation="horizontal"
             android:padding="8dp"
@@ -96,7 +96,7 @@
             <ImageView
                 android:layout_width="45dp"
                 android:layout_height="45dp"
-                android:src="@drawable/country"
+                android:src="@drawable/dark_mode"
                 android:tint="#FFFFFF"
                 tools:ignore="ContentDescription" />
 
@@ -104,11 +104,11 @@
                 android:id="@+id/countryTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:gravity="center"
                 android:padding="5dip"
-                android:text="@string/country_for_weather"
+                android:text="@string/mode_app"
                 android:textColor="@color/white"
                 android:textSize="25sp"
                 app:layout_constraintEnd_toStartOf="@+id/lanSpinner"
@@ -121,15 +121,14 @@
                 android:gravity="right"
                 tools:ignore="RtlHardcoded">
 
-                <Spinner
-                    android:id="@+id/countrySpinner"
+                <Switch
+                    android:id="@+id/themeSwitch"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:layout_gravity="right"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="MissingConstraints" />
-
+                    tools:ignore="MissingConstraints"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

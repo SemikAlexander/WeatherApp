@@ -14,4 +14,5 @@
     <string name="change_data">Погодные данные обновлены!</string>
     <string name="lang_app">Язык</string>
     <string name="country_for_weather">Страна</string>
+    <string name="mode_app">Тёмная тема</string>
 </resources>

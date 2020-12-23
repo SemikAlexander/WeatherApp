@@ -1,6 +1,7 @@
 package com.example.weatherapp
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -28,7 +29,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val pref = getSharedPreferences("setting", Context.MODE_PRIVATE)
+
+        if (pref.getString("mode", null) == "dark")
+            setTheme(R.style.Theme_WeatherAppNight)
+        else
+            setTheme(R.style.Theme_WeatherApp)
+
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_settings)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

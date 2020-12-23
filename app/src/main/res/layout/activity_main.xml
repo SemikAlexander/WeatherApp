@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="25dp"
-    android:background="@color/blue1">
+    android:background="?attr/colorPrimaryVariant">
 
     <ImageButton
         android:layout_alignRight="@+id/mainContainer"
@@ -12,7 +12,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="right"
-        android:background="@color/blue1"
+        android:background="?attr/colorPrimaryVariant"
         android:scaleType="centerCrop"
         app:srcCompat="@drawable/synchronize" />
 
@@ -21,7 +21,7 @@
         android:id="@+id/settingImageButton"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:background="@color/blue1"
+        android:background="?attr/colorPrimaryVariant"
         android:scaleType="centerCrop"
         app:srcCompat="@drawable/settings" />
 
@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content">
                 <AutoCompleteTextView
                     android:id="@+id/city"
-                    android:backgroundTint="@color/blue1"
+                    android:backgroundTint="?attr/colorPrimaryVariant"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
@@ -71,7 +71,8 @@
             android:layout_centerInParent="true">
 
             <TextView android:id="@+id/status" android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:textSize="18dp"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
                 android:layout_gravity="center"
                 android:textColor="@color/white"
                 android:text="Clear Sky"/>
