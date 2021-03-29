@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,130 +7,58 @@
     android:background="?attr/colorPrimaryVariant"
     tools:context=".SettingsActivity">
 
+    <ImageView
+        android:id="@+id/dark_mode"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_baseline_brightness_4_24"
+        android:scaleType="centerCrop"
+        android:layout_alignParentRight="true"
+        android:tag="light theme"/>
+
     <Button
         android:id="@+id/saveButton"
-        android:layout_width="405dp"
-        android:layout_height="68dp"
+        android:layout_width="280dp"
+        android:layout_height="55dp"
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
-        android:background="?attr/colorPrimary"
+        android:layout_marginBottom="30dp"
         android:text="@string/save_button"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints" />
+        android:textColor="@color/white"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/languageImageView"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_baseline_language_24"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="53dp"
+        android:layout_marginLeft="8dp"/>
+
+    <TextView
+        android:id="@+id/languageTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:ignore="MissingConstraints">
+        android:text="@string/lang_app"
+        android:textSize="18sp"
+        android:layout_toRightOf="@+id/languageImageView"
+        android:layout_toEndOf="@+id/languageImageView"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/white"
+        android:layout_marginTop="66dp"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_weight="1"
-            android:background="?attr/colorPrimaryVariant"
-            android:gravity="left"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints,RtlHardcoded">
+    <Spinner
+        android:id="@+id/languageSpinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_toRightOf="@id/languageTextView"
+        android:layout_toEndOf="@id/languageTextView"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="62dp"/>
 
-            <ImageView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:src="@drawable/language"
-                android:tint="#FFFFFF" />
-
-            <TextView
-                android:id="@+id/lanTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:gravity="center"
-                android:padding="5dip"
-                android:text="@string/lang_app"
-                android:textColor="@color/white"
-                android:textSize="25sp"
-                app:layout_constraintEnd_toStartOf="@+id/lanSpinner"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:gravity="right">
-
-                <Spinner
-                    android:id="@+id/lanSpinner"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="MissingConstraints" />
-
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_weight="1"
-            android:background="?attr/colorPrimaryVariant"
-            android:gravity="left"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints,RtlHardcoded">
-
-            <ImageView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:src="@drawable/dark_mode"
-                android:tint="#FFFFFF"
-                tools:ignore="ContentDescription" />
-
-            <TextView
-                android:id="@+id/countryTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:gravity="center"
-                android:padding="5dip"
-                android:text="@string/mode_app"
-                android:textColor="@color/white"
-                android:textSize="25sp"
-                app:layout_constraintEnd_toStartOf="@+id/lanSpinner"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:gravity="right"
-                tools:ignore="RtlHardcoded">
-
-                <Switch
-                    android:id="@+id/themeSwitch"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_gravity="right"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="MissingConstraints"/>
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

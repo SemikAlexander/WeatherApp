@@ -29,7 +29,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val pref = getSharedPreferences("setting", Context.MODE_PRIVATE)
+        super.onCreate(savedInstanceState)
+        /*val pref = getSharedPreferences("setting", Context.MODE_PRIVATE)
 
         if (pref.getString("mode", null) == "dark")
             setTheme(R.style.Theme_WeatherAppNight)
@@ -38,6 +39,51 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.apply {
+
+            city.threshold = 2
+
+            synchronizeImageButton.setOnClickListener {
+                getWeatherForecast(binding.city.text.toString())
+                toast(getString(R.string.change_data))
+            }
+
+            var timer = Timer()
+            city.doAfterTextChanged {
+                timer.cancel()
+                timer = Timer()
+                timer.schedule(
+                        object : TimerTask() {
+                            override fun run() {
+                                getCity(it.toString())
+                            }
+                        },
+                        DELAY
+                )
+            }
+
+            settingImageButton.setOnClickListener {
+                startActivity<SettingsActivity>()
+            }
+        }
+
+        getWeatherForecast(binding.city.text.toString())*/
+    }
+
+    override fun onStart() {
+        val pref = getSharedPreferences("setting", Context.MODE_PRIVATE)
+
+        if (pref.getString("mode", null) == "dark")
+            setTheme(R.style.Theme_WeatherAppNight)
+        else
+            setTheme(R.style.Theme_WeatherApp)
+
+        super.onStart()
+        setContentView(R.layout.activity_main)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

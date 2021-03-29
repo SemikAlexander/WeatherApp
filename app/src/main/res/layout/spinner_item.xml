@@ -3,8 +3,9 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="right"
+    android:gravity="center"
     android:padding="5dip"
     android:text="@string/max_temp"
-    android:textColor="#FFFFFF"
-    android:textSize="25sp"/>
+    android:textColor="@color/white"
+    android:background="?attr/colorPrimaryVariant"
+    android:textSize="18sp"/>
