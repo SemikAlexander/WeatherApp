@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var language: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,6 +83,8 @@ class MainActivity : AppCompatActivity() {
         else
             setTheme(R.style.Theme_WeatherApp)
 
+        language = pref.getString("language", null).toString()
+
         super.onStart()
         setContentView(R.layout.activity_main)
 
@@ -93,7 +96,7 @@ class MainActivity : AppCompatActivity() {
             city.threshold = 2
 
             synchronizeImageButton.setOnClickListener {
-                getWeatherForecast(binding.city.text.toString())
+                getWeatherForecast(binding.city.text.toString(), language)
                 toast(getString(R.string.change_data))
             }
 
@@ -116,7 +119,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        getWeatherForecast(binding.city.text.toString())
+        getWeatherForecast(binding.city.text.toString(), language)
     }
 
     @SuppressLint("SetTextI18n")
@@ -152,16 +155,16 @@ class MainActivity : AppCompatActivity() {
                 ))
 
                 city.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
-                    getWeatherForecast(parent.getItemAtPosition(position).toString())
+                    getWeatherForecast(parent.getItemAtPosition(position).toString(), language)
                 }
             }
         }
     }
 
-    private fun getWeatherForecast(cityName: String) {
+    private fun getWeatherForecast(cityName: String, language: String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val answer = API.api.getWeather(cityName).execute()
+                val answer = API.api.getWeather(cityName, language).execute()
                 launch(Dispatchers.Main) {
                     weatherDataLoaded(answer.body())
                 }

@@ -12,6 +12,7 @@ interface API {
     @GET("weather")
     fun getWeather(
             @Query("q") cityName: String,
+            @Query("lang") language: String,
             @Query("units") units: String = "metric",
             @Query("appid") appId: String = apiToken
     ): Call<Weather>
