@@ -1,4 +1,4 @@
-package com.example.weatherapp.weatherDataClasses
+package com.example.weatherapp.api.models.response.weather
 
 data class WeatherX(
     val description: String,

@@ -1,27 +1,12 @@
 <resources>
     <!-- Base application theme. -->
     <style name="Theme.WeatherApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
         <item name="colorPrimary">@color/blue2</item>
         <item name="colorPrimaryVariant">@color/blue1</item>
         <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/blue2</item>
-        <!-- Status bar color. -->
-        <!-- Customize your theme here. -->
-    </style>
-    <style name="Theme.WeatherAppNight" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/dark2</item>
-        <item name="colorPrimaryVariant">@color/dark1</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/blue2</item>
-        <!-- Status bar color. -->
-        <!-- Customize your theme here. -->
+        <item name="android:windowFullscreen">true</item>
     </style>
 </resources>

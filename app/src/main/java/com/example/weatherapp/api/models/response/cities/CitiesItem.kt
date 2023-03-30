@@ -1,4 +1,4 @@
-package com.example.weatherapp.citiesDataClasses
+package com.example.weatherapp.api.models.response.cities
 
 data class CitiesItem(
     val latt_long: String,

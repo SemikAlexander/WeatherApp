@@ -15,4 +15,5 @@
     <string name="lang_app">Lengua</string>
     <string name="country_for_weather">País</string>
     <string name="mode_app">Tema oscuro</string>
+    <string name="about_dev">alex.prog.99</string>
 </resources>
