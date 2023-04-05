@@ -15,6 +15,7 @@ import com.example.weatherapp.api.models.response.cities.Cities
 import com.example.weatherapp.api.models.response.weather.Weather
 import com.example.weatherapp.databinding.FragmentHomeBinding
 import com.example.weatherapp.extention.ViewBindingFragment
+import com.example.weatherapp.setVisibleOrGone
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.text.SimpleDateFormat
@@ -123,21 +124,8 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
 
     private fun loadingStatus(isLoading: Boolean) {
         binding.run {
-            val loadingViews =
-                listOf(
-                    sunriseLL, sunsetLL, windLL, pressureLL, humidityLL, aboutLL,
-                    statusTV, temperatureTV, tempMinTV, tempMaxTV, updatedAtTV, countryTV
-                )
-
-            for (views in loadingViews) {
-                if (isLoading) {
-                    refreshSRL.isRefreshing = false
-                    views.startLoading()
-                } else {
-                    refreshSRL.isRefreshing = false
-                    views.stopLoading()
-                }
-            }
+            loaderFL.setVisibleOrGone(isLoading)
+            refreshSRL.isRefreshing = false
         }
     }
 

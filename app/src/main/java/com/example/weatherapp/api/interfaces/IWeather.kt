@@ -13,4 +13,12 @@ interface IWeather {
         @Query("appid") appid: String = apiToken,
         @Query("units") units: String = "metric"
     ): Weather
+
+    @GET("forecast/daily")
+    suspend fun getDailyForecast(
+        @Query("lat") lat: Double,
+        @Query("lon") lon: Double,
+        @Query("cnt") cnt: Int = 16,
+        @Query("appid") appid: String = apiToken
+    ): Weather
 }

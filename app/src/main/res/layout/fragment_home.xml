@@ -58,7 +58,7 @@
                     tools:ignore="LabelFor"
                     tools:text="London" />
 
-                <aglibs.loading.skeleton.view.SkeletonTextView
+                <TextView
                     android:id="@+id/countryTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
             </LinearLayout>
 
 
-            <aglibs.loading.skeleton.view.SkeletonTextView
+            <TextView
                 android:id="@+id/updatedAtTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -81,6 +81,20 @@
                 android:textSize="14sp" />
 
         </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/dailyWeatherRV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addressContainer"
+            tools:itemCount="16"
+            android:visibility="gone"
+            tools:listitem="@layout/daily_weather_forecast_item" />
 
         <LinearLayout
             android:id="@+id/overviewContainer"
@@ -98,7 +112,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/addressContainer">
 
-            <aglibs.loading.skeleton.view.SkeletonTextView
+            <TextView
                 android:id="@+id/statusTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -107,7 +121,7 @@
                 android:textSize="18sp"
                 tools:text="Clear Sky" />
 
-            <aglibs.loading.skeleton.view.SkeletonTextView
+            <TextView
                 android:id="@+id/temperatureTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -124,7 +138,7 @@
                 android:layout_marginTop="5dp"
                 android:orientation="horizontal">
 
-                <aglibs.loading.skeleton.view.SkeletonTextView
+                <TextView
                     android:id="@+id/tempMinTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -132,7 +146,7 @@
                     android:text="@string/min_temp"
                     android:textColor="@color/white" />
 
-                <aglibs.loading.skeleton.view.SkeletonTextView
+                <TextView
                     android:id="@+id/tempMaxTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -165,7 +179,7 @@
                 android:orientation="horizontal"
                 android:weightSum="3">
 
-                <aglibs.loading.skeleton.layout.SkeletonLinearLayout
+                <LinearLayout
                     android:id="@+id/sunriseLL"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -201,9 +215,9 @@
                         android:textSize="14sp"
                         tools:text="06:40 AM" />
 
-                </aglibs.loading.skeleton.layout.SkeletonLinearLayout>
+                </LinearLayout>
 
-                <aglibs.loading.skeleton.layout.SkeletonLinearLayout
+                <LinearLayout
                     android:id="@+id/sunsetLL"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -239,9 +253,9 @@
                         android:textSize="14sp"
                         tools:text="06:40 AM" />
 
-                </aglibs.loading.skeleton.layout.SkeletonLinearLayout>
+                </LinearLayout>
 
-                <aglibs.loading.skeleton.layout.SkeletonLinearLayout
+                <LinearLayout
                     android:id="@+id/windLL"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -276,7 +290,7 @@
                         android:textSize="14sp"
                         tools:text="06:40 AM" />
 
-                </aglibs.loading.skeleton.layout.SkeletonLinearLayout>
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -288,7 +302,7 @@
                 android:orientation="horizontal"
                 android:weightSum="3">
 
-                <aglibs.loading.skeleton.layout.SkeletonLinearLayout
+                <LinearLayout
                     android:id="@+id/pressureLL"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -324,9 +338,9 @@
                         android:textSize="14sp"
                         tools:text="06:40 AM" />
 
-                </aglibs.loading.skeleton.layout.SkeletonLinearLayout>
+                </LinearLayout>
 
-                <aglibs.loading.skeleton.layout.SkeletonLinearLayout
+                <LinearLayout
                     android:id="@+id/humidityLL"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -362,9 +376,9 @@
                         android:textSize="14sp"
                         tools:text="06:40 AM" />
 
-                </aglibs.loading.skeleton.layout.SkeletonLinearLayout>
+                </LinearLayout>
 
-                <aglibs.loading.skeleton.layout.SkeletonLinearLayout
+                <LinearLayout
                     android:id="@+id/aboutLL"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -399,7 +413,7 @@
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 
-                </aglibs.loading.skeleton.layout.SkeletonLinearLayout>
+                </LinearLayout>
 
             </LinearLayout>
 

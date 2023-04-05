@@ -1,6 +1,5 @@
 package com.example.weatherapp.ui.fragments
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherapp.api.contollers.CityServiceImpl
@@ -30,7 +29,6 @@ class HomeViewModel : ViewModel() {
                 WeatherServiceImpl().getWeather(cityName)
             }
                 .onFailure {
-                    Log.e("ASO", "${it.message}")
                     _weatherData.emit(null)
                 }
                 .onSuccess {
@@ -52,7 +50,6 @@ class HomeViewModel : ViewModel() {
                 CityServiceImpl().getCity(cityName)
             }
                 .onFailure {
-                    Log.e("ASO", "${it.message}")
                     _cityData.emit(null)
                 }
                 .onSuccess {

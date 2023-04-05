@@ -15,4 +15,8 @@
     <string name="mode_app">Dark theme</string>
     <string name="country_for_weather">Country</string>
     <string name="about_dev">alex.prog.99</string>
+
+    <!-- DAILY FORECAST -->
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
 </resources>
