@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mainBackground"
-    tools:context=".ui.fragments.HomeFragment">
+    tools:context=".ui.fragments.home.HomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -82,6 +82,17 @@
 
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/settingsIV"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:contentDescription="@string/settings"
+            android:src="@drawable/settings"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/dailyWeatherRV"
             android:layout_width="match_parent"
@@ -89,11 +100,11 @@
             android:layout_marginStart="25dp"
             android:layout_marginTop="10dp"
             android:orientation="horizontal"
+            android:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/addressContainer"
             tools:itemCount="16"
-            android:visibility="gone"
             tools:listitem="@layout/daily_weather_forecast_item" />
 
         <LinearLayout

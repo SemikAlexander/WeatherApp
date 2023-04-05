@@ -1,4 +1,4 @@
-package com.example.weatherapp.ui.fragments
+package com.example.weatherapp.ui.fragments.home
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.weatherapp.R
 import com.example.weatherapp.api.models.response.cities.Cities
 import com.example.weatherapp.api.models.response.weather.Weather
@@ -104,6 +105,10 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
             refreshSRL.setOnRefreshListener {
                 loadingStatus(true)
                 viewModel.getWeather()
+            }
+
+            settingsIV.setOnClickListener {
+                findNavController().navigate(R.id.action_homeFragment_to_settingsFragment)
             }
 
             cityACTV.doAfterTextChanged {

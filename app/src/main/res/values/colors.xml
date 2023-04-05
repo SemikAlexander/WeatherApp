@@ -17,5 +17,6 @@
     <color name="mainBackground">#0099CC</color>
     <color name="mainBackgroundInfoTab">#3CF1EBF1</color>
     <color name="dailyForecastStrokeBC">#EEEEEE</color>
+    <color name="backBG">#006485</color>
 
 </resources>

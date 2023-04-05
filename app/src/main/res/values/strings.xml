@@ -12,11 +12,20 @@
     <string name="save_button">Save</string>
     <string name="change_data">Weather data updated!</string>
     <string name="lang_app">Language</string>
+    <string name="temp_app">Temperature</string>
     <string name="mode_app">Dark theme</string>
     <string name="country_for_weather">Country</string>
     <string name="about_dev">alex.prog.99</string>
+    <string name="settings">Settings</string>
+    <string name="back">Back</string>
+    <string name="location">Location</string>
+    <string name="help">Help</string>
+    <string name="notifications">Notifications</string>
+    <string name="exit">Exit</string>
 
     <!-- DAILY FORECAST -->
     <string name="today">Today</string>
     <string name="tomorrow">Tomorrow</string>
+
+    <!-- CONTENT DESCRIPTION -->
 </resources>
