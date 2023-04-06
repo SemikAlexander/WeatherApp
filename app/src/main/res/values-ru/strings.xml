@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WeatherApp</string>
+    <string name="sunrise">Восход солнца</string>
+    <string name="sunset">Закат</string>
+    <string name="wind">Ветер</string>
+    <string name="pressure">Давление</string>
+    <string name="humidity">Влажность</string>
+    <string name="created_by">Созданный</string>
+    <string name="update_data">Обновлено по адресу:%1$s</string>
+    <string name="min_temp">Минимальное время:% 1$с</string>
+    <string name="max_temp">Макс. t:% 1$s</string>
+    <string name="save_button">Сохранить</string>
+    <string name="change_data">Обновлены данные о погоде!</string>
+    <string name="lang_app">Язык</string>
+    <string name="temp_app">Температура</string>
+    <string name="mode_app">Темная тема</string>
+    <string name="country_for_weather">Страна</string>
+    <string name="about_dev">alex.prog.99</string>
+    <string name="settings">Настройки</string>
+    <string name="back">Назад</string>
+    <string name="location">Местоположение</string>
+    <string name="help">Помогите</string>
+    <string name="notifications">Уведомления</string>
+    <string name="exit">Выход</string>
+
+    <!-- DAILY FORECAST -->
+    <string name="today">Сегодня</string>
+    <string name="tomorrow">Завтра</string>
+
+    <string name="internet_error">Связь с интернетом потеряна.</string>
+
+    <string name="fahrenheit">Фаренгейт</string>
+    <string name="celsius">Цельсий</string>
+    <string name="kelvin">Кельвин</string>
+</resources>

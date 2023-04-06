@@ -27,5 +27,9 @@
     <string name="today">Today</string>
     <string name="tomorrow">Tomorrow</string>
 
-    <!-- CONTENT DESCRIPTION -->
+    <string name="internet_error">The connection to the Internet is lost.</string>
+
+    <string name="fahrenheit">Fahrenheit</string>
+    <string name="celsius">Celsius</string>
+    <string name="kelvin">Kelvin</string>
 </resources>

@@ -2,6 +2,7 @@ package com.example.weatherapp.ui.fragments.home
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,18 +12,22 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.weatherapp.App
 import com.example.weatherapp.R
 import com.example.weatherapp.api.models.response.cities.Cities
 import com.example.weatherapp.api.models.response.weather.Weather
 import com.example.weatherapp.databinding.FragmentHomeBinding
 import com.example.weatherapp.extention.ViewBindingFragment
 import com.example.weatherapp.setVisibleOrGone
+import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
 
+@AndroidEntryPoint
 class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
     private val viewModel: HomeViewModel by viewModels()
     private val DELAY = 1000L
@@ -31,6 +36,8 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.weatherData.onEach { weather ->
+            Log.e("ASO", "weather -> ${Gson().toJson(weather)}")
+
             if (weather != null) {
                 loadingStatus(false)
                 setWeatherContent(weather)
@@ -57,6 +64,12 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
     @SuppressLint("SetTextI18n")
     private fun setWeatherContent(weather: Weather) {
         binding.run {
+            val units = when (App.setting.appMetrics.metrics) {
+                "standard" -> "K"
+                "metric" -> "C"
+                else -> "F"
+            }
+
             cityACTV.clearFocus()
             cityACTV.setText(weather.name.toString())
             countryTV.text = "${weather.sys?.country}"
@@ -68,9 +81,9 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
             statusTV.text = weather.weather!![0].description.replaceFirstChar {
                 it.uppercase()
             }
-            temperatureTV.text = "${(weather.main?.temp!!).roundToInt()}°C"
-            tempMinTV.text = getString(R.string.min_temp, "${weather.main.temp_min.toInt()}°C")
-            tempMaxTV.text = getString(R.string.max_temp, "${weather.main.temp_max.toInt()}°C")
+            temperatureTV.text = "${(weather.main?.temp!!).roundToInt()}°$units"
+            tempMinTV.text = getString(R.string.min_temp, "${weather.main.temp_min.toInt()}°$units")
+            tempMaxTV.text = getString(R.string.max_temp, "${weather.main.temp_max.toInt()}°$units")
             sunriseTV.text = weather.sys?.sunrise?.toFormattedDate("hh:mm a")
             sunsetTV.text = weather.sys?.sunset?.toFormattedDate("hh:mm a")
             windTV.text = weather.wind?.speed.toString()
@@ -129,6 +142,8 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
 
     private fun loadingStatus(isLoading: Boolean) {
         binding.run {
+            Log.e("ASO", "$isLoading")
+
             loaderFL.setVisibleOrGone(isLoading)
             refreshSRL.isRefreshing = false
         }

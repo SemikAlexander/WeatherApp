@@ -3,10 +3,13 @@ package com.example.weatherapp
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
+import kotlinx.coroutines.*
 
 inline fun <reified A : Activity> Context.startActivity(configIntent: Intent.() -> Unit = {}) {
     startActivity(Intent(this, A::class.java).apply(configIntent))
@@ -46,3 +49,27 @@ fun View.setVisibleOrGone(isVisible: Boolean) = if (isVisible) this.visible() el
 
 fun View.setVisibleOrInvisible(isVisible: Boolean) =
     if (isVisible) this.visible() else this.invisible()
+
+fun startCheckingConnection(context: Context, onInternetError: () -> Unit = {}) {
+    val job = Job()
+    val scope = CoroutineScope(Dispatchers.Main + job)
+
+    scope.launch {
+        while (true) {
+            if (!isActiveNetworkConnected(context)) {
+                onInternetError()
+            }
+            delay(30000)
+        }
+    }
+}
+
+fun isActiveNetworkConnected(context: Context): Boolean {
+    val connectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val networkCapabilities =
+        connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+    return networkCapabilities != null &&
+            (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                    networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))
+}

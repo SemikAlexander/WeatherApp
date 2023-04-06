@@ -1,5 +1,6 @@
 package com.example.weatherapp.api.interfaces
 
+import com.example.weatherapp.App
 import com.example.weatherapp.api.models.response.weather.Weather
 import com.example.weatherapp.api.retrofit.apiToken
 import retrofit2.http.GET
@@ -9,9 +10,9 @@ interface IWeather {
     @GET("weather")
     suspend fun getWeather(
         @Query("q") cityName: String,
-        @Query("lang") language: String = "en",
+        @Query("lang") language: String = App.setting.appLanguage.languageKey,
         @Query("appid") appid: String = apiToken,
-        @Query("units") units: String = "metric"
+        @Query("units") units: String = App.setting.appMetrics.metrics
     ): Weather
 
     @GET("forecast/daily")

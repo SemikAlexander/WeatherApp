@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WeatherApp</string>
+    <string name="sunrise">Amanecer</string>
+    <string name="sunset">Puesta</string>
+    <string name="wind">Viento</string>
+    <string name="pressure">Presión</string>
+    <string name="humidity">Humedad</string>
+    <string name="created_by">Creado Por</string>
+    <string name="update_data">Actualizado en: %1 s s</string>
+    <string name="min_temp">Min t: %1 s s</string>
+    <string name="max_temp">T máximo: %1 s s</string>
+    <string name="save_button">Guardar</string>
+    <string name="change_data">Datos meteorológicos actualizados!</string>
+    <string name="lang_app">Idioma</string>
+    <string name="temp_app">Temperatura</string>
+    <string name="mode_app">Tema oscuro</string>
+    <string name="country_for_weather">País</string>
+    <string name="about_dev">alex.prog.99</string>
+    <string name="settings">Configuración</string>
+    <string name="back">Volver</string>
+    <string name="location">Ubicación</string>
+    <string name="help">Ayudar</string>
+    <string name="notifications">Notificación</string>
+    <string name="exit">Salida</string>
+
+    <!-- DAILY FORECAST -->
+    <string name="today">Hoy</string>
+    <string name="tomorrow">Mañana</string>
+
+    <string name="internet_error">La conexión a Internet se ha perdido.</string>
+
+    <string name="fahrenheit">Fahrenheit</string>
+    <string name="celsius">Celsius</string>
+    <string name="kelvin">Kelvin</string>
+</resources>
