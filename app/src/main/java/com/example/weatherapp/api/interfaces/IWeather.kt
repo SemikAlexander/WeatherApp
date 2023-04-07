@@ -19,7 +19,7 @@ interface IWeather {
     suspend fun getDailyForecast(
         @Query("lat") lat: Double,
         @Query("lon") lon: Double,
-        @Query("cnt") cnt: Int = 16,
+        @Query("cnt") cnt: Int = App.setting.dailyCount,
         @Query("appid") appid: String = apiToken
     ): Weather
 }

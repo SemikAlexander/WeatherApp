@@ -29,8 +29,13 @@ class Setting(context: Context) {
         )
         set(value) = pref.edit { putString(Keys.APPLICATION_METRICS, Gson().toJson(value)) }
 
+    var dailyCount: Int
+        get() = pref.getInt(Keys.DAILY_COUNT, 16)
+        set(value) = pref.edit { putInt(Keys.DAILY_COUNT, value) }
+
     object Keys {
         const val APPLICATION_LANGUAGE = "APPLICATION_LANGUAGE"
         const val APPLICATION_METRICS = "APPLICATION_METRICS"
+        const val DAILY_COUNT = "DAILY_COUNT"
     }
 }

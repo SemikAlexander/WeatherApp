@@ -7,9 +7,9 @@
     <string name="pressure">Давление</string>
     <string name="humidity">Влажность</string>
     <string name="created_by">Созданный</string>
-    <string name="update_data">Обновлено по адресу:%1$s</string>
-    <string name="min_temp">Минимальное время:% 1$с</string>
-    <string name="max_temp">Макс. t:% 1$s</string>
+    <string name="update_data">Обновлено по адресу: %1$s</string>
+    <string name="min_temp">Минимальное время: %1$s</string>
+    <string name="max_temp">Макс. t: %1$s</string>
     <string name="save_button">Сохранить</string>
     <string name="change_data">Обновлены данные о погоде!</string>
     <string name="lang_app">Язык</string>
@@ -22,6 +22,7 @@
     <string name="location">Местоположение</string>
     <string name="help">Помогите</string>
     <string name="notifications">Уведомления</string>
+    <string name="dark_mode">Тёмная тема</string>
     <string name="exit">Выход</string>
 
     <!-- DAILY FORECAST -->
@@ -33,4 +34,7 @@
     <string name="fahrenheit">Фаренгейт</string>
     <string name="celsius">Цельсий</string>
     <string name="kelvin">Кельвин</string>
+
+    <string name="version_name">Версия: %1$s</string>
+    <string name="error">Что-то пошло не так.</string>
 </resources>

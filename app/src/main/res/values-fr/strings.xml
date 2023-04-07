@@ -7,9 +7,9 @@
     <string name="pressure">Pression</string>
     <string name="humidity">Humidité</string>
     <string name="created_by">Créé Par</string>
-    <string name="update_data">Mis à jour à: %1 s s</string>
-    <string name="min_temp">Valeur minimale: %1 s s</string>
-    <string name="max_temp">t maximum: %1 s s</string>
+    <string name="update_data">Mis à jour à: %1$s</string>
+    <string name="min_temp">Valeur minimale: %1$s</string>
+    <string name="max_temp">t maximum: %1$s</string>
     <string name="save_button">Enregistrer</string>
     <string name="change_data">Données météo mises à jour!</string>
     <string name="lang_app">Langue</string>
@@ -22,6 +22,7 @@
     <string name="location">Emplacement</string>
     <string name="help">Aider</string>
     <string name="notifications">Notification</string>
+    <string name="dark_mode">Mode sombre</string>
     <string name="exit">Sortie</string>
 
     <!-- DAILY FORECAST -->
@@ -33,4 +34,7 @@
     <string name="fahrenheit">Fahrenheit</string>
     <string name="celsius">Celsius</string>
     <string name="kelvin">Kelvin</string>
+
+    <string name="version_name">Version: %1$s</string>
+    <string name="error">Quelque chose s\'est mal passé.</string>
 </resources>

@@ -21,6 +21,7 @@
     <string name="location">Location</string>
     <string name="help">Help</string>
     <string name="notifications">Notifications</string>
+    <string name="dark_mode">Dark mode</string>
     <string name="exit">Exit</string>
 
     <!-- DAILY FORECAST -->
@@ -32,4 +33,9 @@
     <string name="fahrenheit">Fahrenheit</string>
     <string name="celsius">Celsius</string>
     <string name="kelvin">Kelvin</string>
+
+    <string name="version_name">Version: %1$s</string>
+
+    <!-- ERROR -->
+    <string name="error">Something went wrong.</string>
 </resources>

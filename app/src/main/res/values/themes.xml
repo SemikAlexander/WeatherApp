@@ -9,4 +9,9 @@
         <item name="colorOnSecondary">@color/blue2</item>
         <item name="android:windowFullscreen">true</item>
     </style>
+
+    <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
 </resources>

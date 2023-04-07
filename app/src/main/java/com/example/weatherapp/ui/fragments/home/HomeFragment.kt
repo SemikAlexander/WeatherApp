@@ -2,7 +2,6 @@ package com.example.weatherapp.ui.fragments.home
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +18,6 @@ import com.example.weatherapp.api.models.response.weather.Weather
 import com.example.weatherapp.databinding.FragmentHomeBinding
 import com.example.weatherapp.extention.ViewBindingFragment
 import com.example.weatherapp.setVisibleOrGone
-import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -36,8 +34,6 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.weatherData.onEach { weather ->
-            Log.e("ASO", "weather -> ${Gson().toJson(weather)}")
-
             if (weather != null) {
                 loadingStatus(false)
                 setWeatherContent(weather)
@@ -142,8 +138,6 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
 
     private fun loadingStatus(isLoading: Boolean) {
         binding.run {
-            Log.e("ASO", "$isLoading")
-
             loaderFL.setVisibleOrGone(isLoading)
             refreshSRL.isRefreshing = false
         }

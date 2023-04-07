@@ -5,16 +5,17 @@ import android.content.res.Configuration
 import androidx.lifecycle.ViewModel
 import com.example.weatherapp.App
 import com.example.weatherapp.R
+import com.example.weatherapp.ui.activities.MainActivity
 import java.util.Locale
 import javax.inject.Inject
 
 class SettingsViewModel @Inject constructor() : ViewModel() {
     fun changeLocale(context: Context, locale: Locale) {
-        Locale.setDefault(locale)
-
         val config = Configuration()
         config.setLocale(locale)
         context.createConfigurationContext(config)
+
+        MainActivity.appLanguage.value = App.setting.appLanguage.languageKey
     }
 
     fun getUnit(context: Context): String {

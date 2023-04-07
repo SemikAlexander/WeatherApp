@@ -132,6 +132,40 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/darkModeRL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@color/backBG">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/dark_mode"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    tools:ignore="RelativeOverlap" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/darkModeSC"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:checked="false"
+                    android:thumb="@drawable/notification_thumb"
+                    app:track="@drawable/notification_track" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/languageRL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
