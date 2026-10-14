@@ -5,12 +5,14 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.InsetDrawable
+import android.content.Intent
 import android.os.Bundle
 import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.weatherapp.App
 import com.example.weatherapp.BuildConfig
@@ -20,9 +22,11 @@ import com.example.weatherapp.databinding.FragmentSettingsBinding
 import com.example.weatherapp.extention.ViewBindingFragment
 import com.example.weatherapp.extention.models.ApplicationLanguage
 import com.example.weatherapp.extention.models.ApplicationMetrics
+import com.example.weatherapp.ui.MainActivity
 import com.example.weatherapp.ui.adapters.SettingsAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
 class SettingsFragment : ViewBindingFragment<FragmentSettingsBinding>() {
@@ -33,6 +37,26 @@ class SettingsFragment : ViewBindingFragment<FragmentSettingsBinding>() {
 
         setContent()
         setClickListeners()
+        observeRestartEvent()
+    }
+
+    /**
+     * Реакция на смену языка: перезапуск единственной Activity
+     * с новой локалью (она применится в attachBaseContext).
+     * CLEAR_TASK + NEW_TASK нужны, чтобы полностью очистить back stack навграфа;
+     * launchMode="singleTop" в манифесте гарантирует, что новый экземпляр не задвоится.
+     */
+    private fun observeRestartEvent() {
+        viewModel.restartEvent
+            .onEach {
+                val context = requireContext().applicationContext
+                val intent = Intent(context, MainActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    putExtra(MainActivity.EXTRA_RESTART_FOR_LOCALE, true)
+                }
+                context.startActivity(intent)
+            }
+            .launchIn(lifecycleScope)
     }
 
     @SuppressLint("SetTextI18n")
@@ -92,10 +116,7 @@ class SettingsFragment : ViewBindingFragment<FragmentSettingsBinding>() {
                 onItemClicked = {
                     if (it is ApplicationLanguage) {
                         App.setting.appLanguage = it
-                        viewModel.changeLocale(
-                            requireContext(),
-                            Locale(App.setting.appLanguage.languageKey)
-                        )
+                        viewModel.changeLocale()
                     } else {
                         App.setting.appMetrics = it as ApplicationMetrics
                     }
