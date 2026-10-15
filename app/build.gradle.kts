@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.parcelize)
-    alias(libs.plugins.kotlin.kapt) // Hilt 2.56.x официально поддерживает KAPT; KSP-миграция — отдельная задача
+    alias(libs.plugins.kotlin.ksp) // Hilt-процессор через KSP (быстрее kapt; официальный путь Dagger)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.hilt)
 }
@@ -19,6 +19,15 @@ android {
         versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // API-ключ OpenWeatherMap: из local.properties (файл исключён из VCS через .gitignore).
+        // Значение подставляется без кавычек и экранируется buildConfigField автоматически.
+        val localPropsFile: File = rootProject.file("local.properties")
+        val localProperties = java.util.Properties().apply {
+            if (localPropsFile.exists()) localPropsFile.inputStream().use { load(it) }
+        }
+        val owmApiKey = localProperties.getProperty("OPEN_WEATHER_MAP_API_KEY", "")
+        buildConfigField("String", "OWM_API_KEY", "\"$owmApiKey\"")
     }
 
     buildTypes {
@@ -29,6 +38,11 @@ android {
                 "proguard-rules.pro",
             )
         }
+    }
+
+    buildFeatures {
+        buildConfig = true // BuildConfig.VERSION_NAME / OWM_API_KEY (используется в Settings/Home)
+        compose = true
     }
 
     compileOptions {
@@ -42,32 +56,16 @@ android {
             jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
         }
     }
-
-    buildFeatures {
-        viewBinding = true
-        // Подготовка к внедрению Compose: композаблы доступны в модулях ViewBinding сразу.
-        compose = true
-    }
 }
 
 dependencies {
     // AndroidX базовое
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.material)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.fragment.ktx)
-    implementation(libs.androidx.legacy.support.v4)
-    implementation(libs.androidx.swiperefreshlayout)
 
     // Lifecycle
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-
-    // Навигация (View-based, до миграции экранов на Compose)
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
 
     // Coroutines
     implementation(libs.kotlinx.coroutines.core)
@@ -78,17 +76,14 @@ dependencies {
     implementation(libs.retrofit.converter.gson)
     implementation(libs.okhttp.logging.interceptor)
 
-    // DI
+    // DI (Hilt-процессор через KSP вместо kapt)
     implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 
     // Изображения
     implementation(libs.coil.compose)
 
-    // Скелетоны загрузки
-    implementation(libs.agskeleton.loading)
-
-    // --- Compose (подготовка к внедрению) ---
+    // --- Compose ---
     // BOM гарантирует согласованные версии compose-артефактов без явных номеров.
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
@@ -96,6 +91,9 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    // Навигация: Compose Navigation (SingleActivity, маршруты — строки, не nav_graph.xml)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
     debugImplementation(libs.androidx.compose.ui.tooling) // CompositionPreview / tooling только в debug
     debugImplementation(libs.androidx.compose.ui.test.manifest) // Manifest для compose-test в instrumentation
 

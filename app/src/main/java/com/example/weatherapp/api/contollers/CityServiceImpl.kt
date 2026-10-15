@@ -1,11 +1,13 @@
 package com.example.weatherapp.api.contollers
 
 import com.example.weatherapp.api.interfaces.ICity
-import com.example.weatherapp.api.models.response.cities.Cities
+import com.example.weatherapp.api.models.response.cities.CitiesItem
 import com.example.weatherapp.api.retrofit.cityRetrofit
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class CityServiceImpl {
-    suspend fun getCity(cityName: String): Cities {
-        return cityRetrofit.create(ICity::class.java).getCities(cityName)
-    }
+@Singleton
+class CityServiceImpl @Inject constructor() : ICity {
+    override suspend fun getCities(cityName: String): List<CitiesItem> =
+        cityRetrofit.create(ICity::class.java).getCities(cityName)
 }

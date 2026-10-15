@@ -103,7 +103,7 @@ object SettingsUI {
                     Spacer(Modifier.height(10.dp))
 
                     SettingsRow(
-                        title = stringResource(R.string.language_title),
+                        title = stringResource(R.string.lang_app),
                         value = state.languageLabel,
                         onClick = onOpenLanguage,
                     )

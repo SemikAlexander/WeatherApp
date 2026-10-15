@@ -9,8 +9,11 @@ import com.example.weatherapp.api.interfaces.IWeather
 import com.example.weatherapp.logic.WeatherFormatter
 import com.example.weatherapp.mvi.MviViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -41,6 +44,21 @@ class HomeViewModel @Inject constructor(
     val cityName: StateFlow<String> = _cityName.asStateFlow()
 
     private var searchJob: Job? = null
+
+    /**
+     * Live-поиск городов: distinctUntilChanged отсекает повторные эмиссии того же текста,
+     * debounce схлопывает быстрые последовательные нажатия. Требование UX: обновление
+     * работает и «на лету», и по Enter — оба пути идут через [HomeIntent.SearchSubmitted]/
+     * [HomeIntent.CityQueryChanged], дедупликация ниже исключает двойной запрос.
+     */
+    @OptIn(FlowPreview::class)
+    private fun observeLiveSearch() {
+        _cityQuery
+            .debounce(SEARCH_DEBOUNCE_MS)
+            .distinctUntilChanged()
+            .onEach { query -> if (query.length >= MIN_QUERY_LENGTH) runCitySearch(query) }
+            .launchIn(viewModelScope)
+    }
 
     override fun initialState(): HomeState = HomeState()
 

@@ -1,17 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Base application theme. -->
-    <style name="Theme.WeatherApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/blue2</item>
-        <item name="colorPrimaryVariant">@color/blue1</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/blue2</item>
+    <!--
+        Base application theme. Compose-экраны рисуют собственную Material3-тему
+        (WeatherAppTheme); этот стиль нужен только для стартового окна Activity
+        (фон до первой композиции). Parent — платформенный android:Theme.Material.*:
+        не требует appcompat/material в classpath после удаления View-библиотек.
+    -->
+    <style name="Theme.WeatherApp" parent="android:Theme.Material.NoActionBar">
+        <item name="android:colorPrimary">@color/blue2</item>
+        <item name="android:colorPrimaryDark">@color/blue1</item>
+        <item name="android:windowBackground">@color/blue2</item>
         <item name="android:windowFullscreen">true</item>
-    </style>
-
-    <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:background">@android:color/transparent</item>
     </style>
 </resources>
