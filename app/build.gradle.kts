@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -23,7 +25,7 @@ android {
         // API-ключ OpenWeatherMap: из local.properties (файл исключён из VCS через .gitignore).
         // Значение подставляется без кавычек и экранируется buildConfigField автоматически.
         val localPropsFile: File = rootProject.file("local.properties")
-        val localProperties = java.util.Properties().apply {
+        val localProperties = Properties().apply {
             if (localPropsFile.exists()) localPropsFile.inputStream().use { load(it) }
         }
         val owmApiKey = localProperties.getProperty("OPEN_WEATHER_MAP_API_KEY", "")
