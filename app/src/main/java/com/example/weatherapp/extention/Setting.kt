@@ -33,9 +33,15 @@ class Setting(context: Context) {
         get() = pref.getInt(Keys.DAILY_COUNT, 16)
         set(value) = pref.edit { putInt(Keys.DAILY_COUNT, value) }
 
+    /** Последний выбранный город — восстанавливается при старте Home-экрана. */
+    var lastCityName: String?
+        get() = pref.getString(Keys.LAST_CITY_NAME, null)
+        set(value) = pref.edit { putString(Keys.LAST_CITY_NAME, value) }
+
     object Keys {
         const val APPLICATION_LANGUAGE = "APPLICATION_LANGUAGE"
         const val APPLICATION_METRICS = "APPLICATION_METRICS"
         const val DAILY_COUNT = "DAILY_COUNT"
+        const val LAST_CITY_NAME = "LAST_CITY_NAME"
     }
 }
