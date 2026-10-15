@@ -1,0 +1,144 @@
+# WeatherApp
+
+Погодное Android-приложение на **Jetpack Compose** с архитектурой **MVI** и **Single Activity**.
+Отображает текущую погоду (OpenWeatherMap) и прогноз (MetaWeather), поддерживает два языка (EN/RU) и две системы единиц (метрическая/имперская).
+
+---
+
+## Функциональность
+
+| Экран | Возможности |
+|---|---|
+| **Home** | Поиск города (live-поиск с debounce + `distinctUntilChanged`, а также по нажатию Enter), карточка текущей погоды (температура, ветер, облачность), прогноз на ближайшие дни, индикатор отсутствия сети (Snackbar), выход из приложения |
+| **Settings** | Выбор языка (EN/RU) — применяется перезапуском Activity, выбор системы единиц (°C/км·ч⁻¹ или °F/миль·ч⁻¹), диалог подтверждения смены языка |
+
+Сетевые ошибки (timeout, 401, offline) обрабатываются и показываются пользователю через MVI-эффекты.
+
+---
+
+## Архитектура
+
+### Single Activity + Compose Navigation
+Единственная точка входа — `ui/MainActivity.kt` (обёрнута в `attachBaseContext` для применения локали). Навигация — `androidx.navigation:navigation-compose`, маршруты описаны в `ui/AppNavHost.kt`:
+
+```kotlin
+object Routes {
+    const val HOME = "home"
+    const val SETTINGS = "settings"
+}
+```
+
+Legacy-код удалён: XML-layout'ы фрагментов, `nav_graph.xml`, ViewBinding — в проекте нет ни одного layout-файла экранов.
+
+### MVI (`mvi/Mvi.kt`)
+Базовый `MviViewModel<State : Any, Intent : IaIntent, Effect : IaEffect>`:
+
+- **State** — единственный источник истины экрана, `StateFlow`, неизменяемые data class'ы;
+- **Intent** — маркер пользовательского действия (`IaIntent`);
+- **Effect** — однократные побочные события (Snackbar, перезапуск) через `SharedFlow(replay = 0)`;
+- **reducer(state, intent) → state** — чистая функция, легко тестируется;
+- **handle(intent)** — побочные эффекты (сеть) во `viewModelScope`.
+
+Контракты экранов — в `*Contract.kt` (`HomeContract`, `SettingsContract`).
+
+### Структура UI-кода
+Повторяющиеся элементы вынесены в переиспользуемые Composable в `ui/components/CommonComponents.kt` (`CircleIconButton`, `SelectableItemRow`, `SettingsRow` и др.). Элементы каждого экрана живут в отдельном объекте-неймспейсе:
+
+- `object MainUI` — компоненты экрана Home (`ui/screens/home/HomeScreen.kt`);
+- `object SettingsUI` — компоненты экрана Settings (`ui/screens/settings/SettingsScreen.kt`).
+
+Каждый ключевой компонент снабжён `@Preview` — вёрстку можно смотреть и править без запуска приложения (Android Studio → Split/Design view).
+
+### Слои проекта
+
+```
+com.example.weatherapp
+├── api/            // Retrofit-сервисы (IWeather, ICity), модели ответов, ApiConfig, интерцепторы
+├── di/             // Hilt-модули (NetworkModule)
+├── extention/      // Setting (SharedPreferences), расширения, ApplicationLanguage/ApplicationMetrics
+├── logic/          // Чистая логика: LanguageLogic, WeatherFormatter (unit-тестируется без Android)
+├── mvi/            // Базовый MVI-каркас
+└── ui/             // MainActivity, AppNavHost, theme/, components/, screens/{home,settings}/
+```
+
+DI — **Hilt** (процессор — **KSP**, kapt удалён). Сеть — **Retrofit + OkHttp + Gson**. Изображения — **Coil**.
+
+---
+
+## Зависимости
+
+Все версии централизованы в Gradle Version Catalog — `gradle/libs.versions.toml` (единственное место обновления библиотек).
+
+### Инструментальный стек
+| Библиотека | Версия | Назначение |
+|---|---|---|
+| Android Gradle Plugin | 8.13.2 | Сборка (требует Gradle ≥ 8.13) |
+| Kotlin | 2.1.21 | Язык; Compose Compiler через плагин `org.jetbrains.kotlin.plugin.compose` |
+| KSP | — | Кодогенерация Hilt вместо kapt |
+
+### AndroidX / Compose
+| Библиотека | Версия | Назначение |
+|---|---|---|
+| Compose BOM | 2026.09.00 | Согласованные версии ui/material3/tooling |
+| activity-compose | 1.10.1 | `setContent` в Activity |
+| navigation-compose | 2.9.6 | Навигация single-activity |
+| hilt-navigation-compose | 1.2.0 | `hiltViewModel()` в composable |
+| lifecycle (viewmodel/runtime/liveData-ktx) | 2.9.4 | `collectAsStateWithLifecycle`, области ViewModel |
+| core-ktx | 1.17.0 | Расширения ядра (minSdk 23 — 1.19.x не подходит) |
+
+### DI / сеть / прочее
+| Библиотека | Версия | Назначение |
+|---|---|---|
+| Hilt (dagger) | 2.56.1 | Dependency Injection (KSP-совместим) |
+| Retrofit | 2.12.0 | HTTP-клиент (+ converter-gson) |
+| OkHttp logging-interceptor | 4.12.0 | Логирование запросов |
+| kotlinx-coroutines | 1.11.0 | Асинхронность (+ coroutines-test) |
+| Coil-compose | 2.7.0 | Загрузка изображений иконок погоды |
+
+### Тестирование
+| Библиотека | Версия | Назначение |
+|---|---|---|
+| JUnit | 4.13.2 | Unit-тесты |
+| androidx.test.ext:junit | 1.2.1 | Instrumentation-запуск |
+| Espresso | 3.6.1 | UI-тесты |
+| kotlinx-coroutines-test | 1.11.0 | Тестирование суспендирующих функций/Flow |
+
+*(Тесты запланированы как последний этап; каркас reducer'ов и `logic/` спроектированы под чистое unit-тестирование.)*
+
+---
+
+## SDK и сборка
+
+| Параметр | Значение |
+|---|---|
+| compileSdk / targetSdk | 36 |
+| minSdk | 23 |
+| versionName | 1.0.0 |
+| Формат сборки | Gradle Kotlin DSL (`*.gradle.kts`) |
+
+### Настройка перед сборкой
+
+1. Установите Android SDK Platform 36.
+2. Получите ключ OpenWeatherMap и добавьте в **`local.properties`** (файл в `.gitignore`, в VCS не попадает):
+
+```properties
+sdk.dir=/path/to/Android/Sdk
+OPEN_WEATHER_MAP_API_KEY=ваш_ключ
+```
+
+Ключ пробрасывается в код через `BuildConfig.OWM_API_KEY` (`api/ApiConfig.kt`). Без ключа приложение собирается; сетевые запросы вернут 401, что обработано как штатный сценарий ошибки.
+
+3. Сборка и проверка:
+
+```bash
+./gradlew :app:assembleDebug        # APK
+./gradlew :app:testDebugUnitTest    # unit-тесты
+```
+
+---
+
+## Известные ограничения / план
+
+- Смена языка реализована перезапуском Activity (осознанный выбор; per-app locales — в планах ресёрча).
+- Прогноз берётся из MetaWeather — сервис нестабилен, рассматривается миграция на OneCall API OWM.
+- Unit/UI-тесты покрытия всех пользовательских сценариев — следующий этап.
