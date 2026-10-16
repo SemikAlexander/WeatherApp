@@ -53,6 +53,10 @@ class HomeViewModel @Inject constructor(
 
     init {
         observeLiveSearch()
+        // Инициализация с рабочими данными, а не пустым состоянием:
+        // 1) резолвим стартовый город (lastCityName ?: DEFAULT_CITY) и показываем в поле;
+        // 2) грузим погоду.
+        dispatch(HomeIntent.CityInitialized(_cityName.value))
         dispatch(HomeIntent.LoadInitial)
     }
 
@@ -104,6 +108,8 @@ class HomeViewModel @Inject constructor(
             suggestions = persistentListOf(),
             isSuggestionsVisible = false,
         )
+
+        is HomeIntent.CityInitialized -> state.copy(cityQuery = intent.city)
 
         is HomeIntent.CitiesLoaded -> state.copy(suggestions = intent.cities)
 

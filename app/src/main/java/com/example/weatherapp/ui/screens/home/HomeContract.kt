@@ -34,6 +34,9 @@ sealed interface HomeIntent : IaIntent {
     /** Повтор загрузки после ошибки. */
     data object RetryClicked : HomeIntent
 
+    /** Внутренний: стартовый город известен — показать его в поле поиска до загрузки. */
+    data class CityInitialized(val city: String) : HomeIntent
+
     /** Внутренний: результат поиска городов пришёл. */
     data class CitiesLoaded(val cities: ImmutableList<CitiesItem>) : HomeIntent
 

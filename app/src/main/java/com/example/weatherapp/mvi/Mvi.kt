@@ -36,7 +36,7 @@ interface IaEffect
 abstract class MviViewModel<I : IaIntent, S : Any, E : IaEffect> : ViewModel() {
 
     private val _state: MutableStateFlow<S> by lazy { MutableStateFlow(initialState()) }
-    val state: StateFlow<S> = _state.asStateFlow()
+    val state: StateFlow<S> get() = _state.asStateFlow()
 
     /**
      * extraBufferCapacity + DROP_OLDEST: эффект не теряется, если подписчик

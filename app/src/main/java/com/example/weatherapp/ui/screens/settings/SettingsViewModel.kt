@@ -25,7 +25,10 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor() :
     MviViewModel<SettingsIntent, SettingsState, SettingsEffect>() {
 
-    init { dispatch(SettingsIntent.LoadInitial) }
+    init {
+        // Самозагрузка: без этого рождается пустое состояние.
+        dispatch(SettingsIntent.LoadInitial)
+    }
 
     override fun initialState(): SettingsState = SettingsState()
 
