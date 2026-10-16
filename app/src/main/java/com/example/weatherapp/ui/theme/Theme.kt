@@ -15,6 +15,7 @@ val InfoTabBackground = Color(0x3CF1EBF1)
 
 val c212121 = Color(0xFF212121)
 val c323233 = Color(0xFF323233)
+val cFAFAFA = Color(0xFFFAFAFA)
 val c0099CC = Color(0xFF0099CC)
 val c006485 = Color(0xFF006485)
 

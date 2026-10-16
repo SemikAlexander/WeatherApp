@@ -54,6 +54,7 @@ sealed interface HomeIntent : IaIntent {
         val wind: String,
         val pressure: String,
         val humidity: String,
+        val icon: String,
     ) : HomeIntent
 
     /** Внутренний: загрузка погоды завершилась ошибкой. */
@@ -66,7 +67,6 @@ data class HomeState(
     val cityQuery: String = "",
     val suggestions: ImmutableList<CitiesItem> = persistentListOf(),
     val isSuggestionsVisible: Boolean = false,
-    /** null -> показываем плейсхолдеры вместо данных. */
     val weather: WeatherUi? = null,
 ) {
     companion object {
@@ -83,6 +83,7 @@ data class HomeState(
             wind = "0",
             pressure = "0",
             humidity = "0",
+            icon = "",
         )
     }
 }
@@ -101,6 +102,7 @@ data class WeatherUi(
     val wind: String,
     val pressure: String,
     val humidity: String,
+    val icon: String
 )
 
 sealed interface HomeEffect : IaEffect {

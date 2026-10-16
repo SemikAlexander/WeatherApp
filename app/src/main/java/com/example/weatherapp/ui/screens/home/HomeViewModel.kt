@@ -8,7 +8,6 @@ import com.example.weatherapp.api.interfaces.ICity
 import com.example.weatherapp.api.interfaces.IWeather
 import com.example.weatherapp.logic.WeatherFormatter
 import com.example.weatherapp.mvi.MviViewModel
-import com.example.weatherapp.ui.screens.settings.SettingsIntent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.FlowPreview
@@ -126,6 +125,7 @@ class HomeViewModel @Inject constructor(
                 wind = intent.wind,
                 pressure = intent.pressure,
                 humidity = intent.humidity,
+                icon = intent.icon
             ),
         )
 
@@ -162,32 +162,36 @@ class HomeViewModel @Inject constructor(
     private fun loadWeather() {
         viewModelScope.launch {
             runCatching { weatherService.getWeather(_cityName.value) }
-                .onSuccess { w ->
+                .onSuccess { weather ->
                     val units = WeatherFormatter.unitSymbol(App.setting.appMetrics.metrics)
-                    val main = w.main
-                    val sys = w.sys
+                    val main = weather.main
+                    val sys = weather.sys
                     dispatch(
                         HomeIntent.WeatherLoaded(
-                            city = w.name ?: _cityName.value,
+                            city = weather.name ?: _cityName.value,
                             country = sys?.country.orEmpty(),
-                            updatedAt = WeatherFormatter.formatDate(w.dt, DATE_PATTERN_UPDATE),
+                            updatedAt = WeatherFormatter.formatDate(
+                                epochSeconds = weather.dt,
+                                pattern = DATE_PATTERN_UPDATE
+                            ),
                             status = WeatherFormatter.capitalizeDescription(
-                                w.weather?.firstOrNull()?.description,
+                                weather.weather?.firstOrNull()?.description,
                             ),
                             temperature = main?.let {
                                 WeatherFormatter.formatTemperature(it.temp, units)
                             }.orEmpty(),
                             tempMin = main?.let {
-                                WeatherFormatter.formatTemperatureTruncated(it.temp_min, units)
+                                WeatherFormatter.formatTemperatureTruncated(it.tempMin, units)
                             }.orEmpty(),
                             tempMax = main?.let {
-                                WeatherFormatter.formatTemperatureTruncated(it.temp_max, units)
+                                WeatherFormatter.formatTemperatureTruncated(it.tempMax, units)
                             }.orEmpty(),
                             sunrise = WeatherFormatter.formatDate(sys?.sunrise, TIME_PATTERN),
                             sunset = WeatherFormatter.formatDate(sys?.sunset, TIME_PATTERN),
-                            wind = w.wind?.speed?.toInt()?.toString().orEmpty(),
+                            wind = weather.wind?.speed?.toInt()?.toString().orEmpty(),
                             pressure = main?.pressure?.toString().orEmpty(),
                             humidity = main?.humidity?.toString().orEmpty(),
+                            icon = weather.getWeatherIcon()
                         ),
                     )
                     runCatching { App.setting.lastCityName = _cityName.value }

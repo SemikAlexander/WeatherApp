@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
@@ -30,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -38,12 +40,15 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.weatherapp.R
 import com.example.weatherapp.api.models.response.cities.CitiesItem
 import com.example.weatherapp.ui.components.CircleIconButton
 import com.example.weatherapp.ui.components.InfoTile
+import com.example.weatherapp.ui.components.SpacerHeight
+import com.example.weatherapp.ui.components.SpacerWeight
 import com.example.weatherapp.ui.theme.WeatherAppTheme
-import com.example.weatherapp.ui.theme.c006485
+import com.example.weatherapp.ui.theme.*
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.collections.immutable.ImmutableList
@@ -63,28 +68,154 @@ object HomeUI {
         SwipeRefresh(
             modifier = Modifier
                 .fillMaxSize()
-                .background(c006485),
+                .background(c212121),
             state = swipeRefreshState,
             onRefresh = onRefresh
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
                 TopBar(onOpenSettings = onOpenSettings)
+                SpacerHeight(36)
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 24.dp)
+                        .fillMaxWidth()
+                        .background(
+                            color = c323233,
+                            shape = RoundedCornerShape(size = 30.dp)
+                        )
+                        .padding(horizontal = 25.dp, vertical = 32.dp),
+                    horizontalArrangement = Arrangement.spacedBy(60.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = state.weather?.updatedAt.orEmpty(),
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontSize = 10.sp,
+                            color = cFAFAFA,
+                        )
+                        SpacerHeight(4)
+                        Text(
+                            text = state.weather?.status.orEmpty(),
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = Color.White,
+                        )
+                        SpacerHeight(8)
+                        Text(
+                            text = state.weather?.temperature.orEmpty(),
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontSize = 40.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                        )
+                    }
 
-                CitySearchField(
-                    query = state.cityQuery,
-                    suggestions = state.suggestions,
-                    isSuggestionsVisible = state.isSuggestionsVisible,
-                    onQueryChange = onQueryChange,
-                    onSearchSubmit = onSearchSubmit,
-                    onCityPicked = onCityPicked,
-                )
-
-                val weather = state.weather ?: HomeState.EMPTY_WEATHER
-                WeatherBlock(weather = weather)
-
-                Spacer(Modifier.height(10.dp))
-
-                DetailsGrid(weather = weather)
+                    AsyncImage(
+                        modifier = Modifier
+                            .height(66.dp)
+                            .weight(1f),
+                        model = state.weather?.icon.orEmpty(),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        alignment = Alignment.Center
+                    )
+                }
+                SpacerHeight(20)
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 24.dp)
+                        .fillMaxWidth()
+                        .background(
+                            color = c323233,
+                            shape = RoundedCornerShape(size = 30.dp)
+                        )
+                        .padding(horizontal = 25.dp, vertical = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_wind),
+                            modifier = Modifier.size(16.dp),
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                        SpacerHeight(14)
+                        Text(
+                            text = state.weather?.wind.orEmpty(),
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.White,
+                        )
+                        SpacerHeight(4)
+                        Text(
+                            text = stringResource(R.string.wind),
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontSize = 10.sp,
+                            fontWeight = FontWeight.Normal,
+                            color = Color.White,
+                        )
+                    }
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_humidity),
+                            modifier = Modifier.size(16.dp),
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                        SpacerHeight(14)
+                        Text(
+                            text = "${state.weather?.humidity.orEmpty()}%",
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.White,
+                        )
+                        SpacerHeight(4)
+                        Text(
+                            text = stringResource(R.string.humidity),
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontSize = 10.sp,
+                            fontWeight = FontWeight.Normal,
+                            color = Color.White,
+                        )
+                    }
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.pressure),
+                            modifier = Modifier.size(16.dp),
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                        SpacerHeight(14)
+                        Text(
+                            text = state.weather?.pressure.orEmpty(),
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.White,
+                        )
+                        SpacerHeight(4)
+                        Text(
+                            text = stringResource(R.string.pressure),
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontSize = 10.sp,
+                            fontWeight = FontWeight.Normal,
+                            color = Color.White,
+                        )
+                    }
+                }
             }
 
             if (state.isLoading) {
@@ -317,6 +448,7 @@ private val PREVIEW_STATE = HomeState(
         wind = "4",
         pressure = "1012",
         humidity = "72",
+        icon = ""
     ),
 )
 

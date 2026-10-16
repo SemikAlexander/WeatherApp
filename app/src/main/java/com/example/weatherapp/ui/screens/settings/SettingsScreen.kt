@@ -91,7 +91,11 @@ object SettingsUI {
             )
         } ?: state.unitsLabel
 
-        Box(modifier = Modifier.fillMaxSize().background(c006485)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(c212121)
+        ) {
             Column(modifier = Modifier.fillMaxSize()) {
                 HeaderRow(onBack = onBack)
 
@@ -168,7 +172,10 @@ object SettingsUI {
                 iconResId = R.drawable.ic_back,
                 contentDescription = stringResource(R.string.back),
                 onClick = onBack,
-                modifier = Modifier.align(Alignment.CenterStart).padding(start = 10.dp),
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .padding(start = 10.dp),
+                containerColor = c323233
             )
             Text(
                 text = stringResource(R.string.settings),
@@ -225,7 +232,10 @@ object SettingsUI {
 
 /** Резолв локализованных подписей для unit/инструментальных проверок вне Compose. */
 fun unitsLabelLocalized(context: Context, metrics: ApplicationMetrics): String =
-    WeatherFormatter.formatUnitLabel(ScaleNames.localized(context, metrics.metrics), metrics.metricsKey)
+    WeatherFormatter.formatUnitLabel(
+        ScaleNames.localized(context, metrics.metrics),
+        metrics.metricsKey
+    )
 
 // ---------- Previews ----------
 
