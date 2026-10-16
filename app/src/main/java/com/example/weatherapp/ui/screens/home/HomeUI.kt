@@ -1,5 +1,6 @@
 package com.example.weatherapp.ui.screens.home
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,49 +13,38 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.weatherapp.R
-import com.example.weatherapp.api.models.response.cities.CitiesItem
 import com.example.weatherapp.ui.components.CircleIconButton
-import com.example.weatherapp.ui.components.InfoTile
+import com.example.weatherapp.ui.components.SpacerHeight
 import com.example.weatherapp.ui.theme.WeatherAppTheme
-import com.example.weatherapp.ui.theme.c006485
+import com.example.weatherapp.ui.theme.c212121
+import com.example.weatherapp.ui.theme.c323233
+import com.example.weatherapp.ui.theme.cFAFAFA
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import kotlinx.collections.immutable.ImmutableList
 
 object HomeUI {
     @Composable
     fun Root(
         state: HomeState,
-        onQueryChange: (String) -> Unit,
-        onSearchSubmit: (String) -> Unit,
-        onCityPicked: (CitiesItem) -> Unit,
         onRefresh: () -> Unit,
         onOpenSettings: () -> Unit,
         onRetry: () -> Unit,
@@ -63,28 +53,215 @@ object HomeUI {
         SwipeRefresh(
             modifier = Modifier
                 .fillMaxSize()
-                .background(c006485),
+                .background(c212121),
             state = swipeRefreshState,
             onRefresh = onRefresh
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
                 TopBar(onOpenSettings = onOpenSettings)
+                SpacerHeight(36)
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 24.dp)
+                        .fillMaxWidth()
+                        .background(
+                            color = c323233,
+                            shape = RoundedCornerShape(size = 30.dp)
+                        )
+                        .padding(horizontal = 25.dp, vertical = 32.dp),
+                    horizontalArrangement = Arrangement.spacedBy(60.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = state.weather?.updatedAt.orEmpty(),
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontSize = 10.sp,
+                            color = cFAFAFA,
+                        )
+                        SpacerHeight(4)
+                        Text(
+                            text = state.weather?.status.orEmpty(),
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = Color.White,
+                        )
+                        SpacerHeight(8)
+                        Text(
+                            text = state.weather?.temperature.orEmpty(),
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontSize = 40.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                        )
+                    }
 
-                CitySearchField(
-                    query = state.cityQuery,
-                    suggestions = state.suggestions,
-                    isSuggestionsVisible = state.isSuggestionsVisible,
-                    onQueryChange = onQueryChange,
-                    onSearchSubmit = onSearchSubmit,
-                    onCityPicked = onCityPicked,
-                )
-
-                val weather = state.weather ?: HomeState.EMPTY_WEATHER
-                WeatherBlock(weather = weather)
-
-                Spacer(Modifier.height(10.dp))
-
-                DetailsGrid(weather = weather)
+                    AsyncImage(
+                        modifier = Modifier
+                            .height(66.dp)
+                            .weight(1f),
+                        model = state.weather?.icon.orEmpty(),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        alignment = Alignment.Center
+                    )
+                }
+                SpacerHeight(20)
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 24.dp)
+                        .fillMaxWidth()
+                        .background(
+                            color = c323233,
+                            shape = RoundedCornerShape(size = 30.dp)
+                        )
+                        .padding(horizontal = 25.dp, vertical = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.Bottom
+                ) {
+                    Column(
+                        modifier = Modifier.weight(0.18f),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_sunrise),
+                            modifier = Modifier.size(24.dp),
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                        SpacerHeight(4)
+                        Text(
+                            text = state.weather?.sunrise.orEmpty(),
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontSize = 10.sp,
+                            fontWeight = FontWeight.Normal,
+                            color = Color.White,
+                        )
+                    }
+                    Image(
+                        modifier = Modifier
+                            .wrapContentHeight()
+                            .weight(0.64f),
+                        painter = painterResource(R.drawable.sunset_to_sunrise),
+                        contentDescription = null,
+                        contentScale = ContentScale.FillWidth,
+                        alignment = Alignment.BottomCenter
+                    )
+                    Column(
+                        modifier = Modifier.weight(0.18f),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_sunset),
+                            modifier = Modifier.size(24.dp),
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                        SpacerHeight(4)
+                        Text(
+                            text = state.weather?.sunset.orEmpty(),
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontSize = 10.sp,
+                            fontWeight = FontWeight.Normal,
+                            color = Color.White,
+                        )
+                    }
+                }
+                SpacerHeight(20)
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 24.dp)
+                        .fillMaxWidth()
+                        .background(
+                            color = c323233,
+                            shape = RoundedCornerShape(size = 30.dp)
+                        )
+                        .padding(horizontal = 25.dp, vertical = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_wind),
+                            modifier = Modifier.size(16.dp),
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                        SpacerHeight(14)
+                        Text(
+                            text = state.weather?.wind.orEmpty(),
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.White,
+                        )
+                        SpacerHeight(4)
+                        Text(
+                            text = stringResource(R.string.wind),
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontSize = 10.sp,
+                            fontWeight = FontWeight.Normal,
+                            color = Color.White,
+                        )
+                    }
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_humidity),
+                            modifier = Modifier.size(16.dp),
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                        SpacerHeight(14)
+                        Text(
+                            text = "${state.weather?.humidity.orEmpty()}%",
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.White,
+                        )
+                        SpacerHeight(4)
+                        Text(
+                            text = stringResource(R.string.humidity),
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontSize = 10.sp,
+                            fontWeight = FontWeight.Normal,
+                            color = Color.White,
+                        )
+                    }
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.pressure),
+                            modifier = Modifier.size(16.dp),
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                        SpacerHeight(14)
+                        Text(
+                            text = state.weather?.pressure.orEmpty(),
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.White,
+                        )
+                        SpacerHeight(4)
+                        Text(
+                            text = stringResource(R.string.pressure),
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontSize = 10.sp,
+                            fontWeight = FontWeight.Normal,
+                            color = Color.White,
+                        )
+                    }
+                }
             }
 
             if (state.isLoading) {
@@ -116,156 +293,11 @@ object HomeUI {
     }
 
     @Composable
-    fun CitySearchField(
-        query: String,
-        suggestions: ImmutableList<CitiesItem>,
-        isSuggestionsVisible: Boolean,
-        onQueryChange: (String) -> Unit,
-        onSearchSubmit: (String) -> Unit,
-        onCityPicked: (CitiesItem) -> Unit,
-    ) {
-        var expanded by remember { mutableStateOf(false) }
-        val focusManager = LocalFocusManager.current
-        Box(modifier = Modifier.padding(horizontal = 16.dp)) {
-            OutlinedTextField(
-                value = query,
-                onValueChange = {
-                    onQueryChange(it)
-                    expanded =
-                        it.length >= HomeViewModel.MIN_QUERY_LENGTH && suggestions.isNotEmpty()
-                },
-                label = { Text(stringResource(R.string.location)) },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                keyboardActions = KeyboardActions(
-                    onSearch = {
-                        expanded = false
-                        focusManager.clearFocus()
-                        onSearchSubmit(query)
-                    },
-                ),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White,
-                    focusedLabelColor = Color.White,
-                    unfocusedLabelColor = Color.White.copy(alpha = 0.7f),
-                    cursorColor = Color.White,
-                    focusedBorderColor = Color.White,
-                    unfocusedBorderColor = Color.White.copy(alpha = 0.5f),
-                ),
-                modifier = Modifier.fillMaxWidth(),
-            )
-            DropdownMenu(
-                expanded = expanded && isSuggestionsVisible && suggestions.isNotEmpty(),
-                onDismissRequest = { expanded = false },
-            ) {
-                suggestions.forEach { city ->
-                    DropdownMenuItem(
-                        text = { Text(city.title) },
-                        onClick = {
-                            expanded = false
-                            onCityPicked(city)
-                        },
-                    )
-                }
-            }
-        }
-    }
-
-    @Composable
-    fun WeatherBlock(weather: WeatherUi) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            horizontalAlignment = Alignment.Start,
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = weather.city,
-                    fontSize = 40.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White,
-                )
-                Spacer(Modifier.size(8.dp))
-                if (weather.country.isNotBlank()) {
-                    Text(
-                        text = weather.country,
-                        fontSize = 24.sp,
-                        color = Color.White,
-                    )
-                }
-            }
-            Text(
-                text = weather.updatedAt,
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.White.copy(alpha = 0.8f),
-            )
-            Spacer(Modifier.height(16.dp))
-            Text(
-                text = weather.temperature,
-                fontSize = 60.sp,
-                fontWeight = FontWeight.Light,
-                color = Color.White,
-            )
-            Text(
-                text = weather.status,
-                style = MaterialTheme.typography.titleLarge,
-                color = Color.White,
-            )
-            Spacer(Modifier.height(8.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(50.dp)) {
-                Text(
-                    text = stringResource(R.string.min_temp, weather.tempMin),
-                    color = Color.White,
-                )
-                Text(
-                    text = stringResource(R.string.max_temp, weather.tempMax),
-                    color = Color.White,
-                )
-            }
-        }
-    }
-
-    @Composable
-    fun DetailsGrid(weather: WeatherUi) {
-        val tiles = listOf(
-            Triple(R.drawable.ic_sunrise, stringResource(R.string.sunrise), weather.sunrise),
-            Triple(R.drawable.ic_sunset, stringResource(R.string.sunset), weather.sunset),
-            Triple(R.drawable.ic_wind, stringResource(R.string.wind), weather.wind),
-            Triple(R.drawable.pressure, stringResource(R.string.pressure), weather.pressure),
-            Triple(R.drawable.ic_humidity, stringResource(R.string.humidity), weather.humidity),
-            Triple(
-                R.drawable.info,
-                stringResource(R.string.created_by),
-                stringResource(R.string.about_dev)
-            ),
-        )
-        Column(
-            modifier = Modifier.padding(horizontal = 25.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-        ) {
-            tiles.chunked(3).forEach { rowTiles ->
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    rowTiles.forEach { (iconRes, label, value) ->
-                        InfoTile(
-                            iconResId = iconRes,
-                            label = label,
-                            value = value,
-                            modifier = Modifier.weight(1f),
-                        )
-                    }
-                }
-            }
-        }
-    }
-
-    @Composable
     fun LoadingOverlay() {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(c006485.copy(alpha = 0.85f)),
+                .background(c212121.copy(alpha = 0.85f)),
             contentAlignment = Alignment.Center,
         ) {
             CircularProgressIndicator(color = Color.White)
@@ -277,7 +309,7 @@ object HomeUI {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(c006485.copy(alpha = 0.9f)),
+                .background(c212121.copy(alpha = 0.9f)),
             contentAlignment = Alignment.Center,
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -293,6 +325,7 @@ object HomeUI {
                 CircleIconButton(
                     iconResId = R.drawable.synchronize,
                     contentDescription = stringResource(R.string.save_button),
+                    containerColor = c323233,
                     onClick = onRetry,
                 )
             }
@@ -314,9 +347,10 @@ private val PREVIEW_STATE = HomeState(
         tempMax = "21°C",
         sunrise = "06:40 AM",
         sunset = "07:35 PM",
-        wind = "4",
-        pressure = "1012",
+        wind = "4 met/s",
+        pressure = "1012 hPa",
         humidity = "72",
+        icon = ""
     ),
 )
 
@@ -326,9 +360,6 @@ private fun HomeScreenPreview() {
     WeatherAppTheme {
         HomeUI.Root(
             state = PREVIEW_STATE,
-            onQueryChange = {},
-            onSearchSubmit = {},
-            onCityPicked = {},
             onRefresh = {},
             onOpenSettings = {},
             onRetry = {},
@@ -342,9 +373,6 @@ private fun HomeLoadingPreview() {
     WeatherAppTheme {
         HomeUI.Root(
             state = PREVIEW_STATE.copy(isLoading = true),
-            onQueryChange = {},
-            onSearchSubmit = {},
-            onCityPicked = {},
             onRefresh = {},
             onOpenSettings = {},
             onRetry = {},
@@ -358,9 +386,6 @@ private fun HomeErrorPreview() {
     WeatherAppTheme {
         HomeUI.Root(
             state = HomeState(hasError = true),
-            onQueryChange = {},
-            onSearchSubmit = {},
-            onCityPicked = {},
             onRefresh = {},
             onOpenSettings = {},
             onRetry = {},

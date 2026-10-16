@@ -15,25 +15,24 @@ val InfoTabBackground = Color(0x3CF1EBF1)
 
 val c212121 = Color(0xFF212121)
 val c323233 = Color(0xFF323233)
-val c0099CC = Color(0xFF0099CC)
+val cFAFAFA = Color(0xFFFAFAFA)
 val c006485 = Color(0xFF006485)
+val c757575 = Color(0xFF757575)
+val c9e9e9e = Color(0xFF9E9E9E)
+val cf9f9fa = Color(0xFFF9F9FA)
 
 private val LightColors = lightColorScheme(
-    primary = c0099CC,
-    secondary = c006485,
-    background = c0099CC,
-    surface = c006485,
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onBackground = Color.White,
-    onSurface = Color.White,
+    primary = c757575,
+    secondary = c9e9e9e,
+    background = Color.White,
+    surface = cf9f9fa,
 )
 
 private val DarkColors = darkColorScheme(
-    primary = c0099CC,
-    secondary = c006485,
-    background = Color(0xFF121212),
-    surface = Color(0xFF1E1E1E),
+    primary = Color.White,
+    secondary = cFAFAFA,
+    background = c212121,
+    surface = c323233,
 )
 
 /**

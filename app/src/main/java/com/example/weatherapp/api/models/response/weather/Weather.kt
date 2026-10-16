@@ -14,9 +14,11 @@ data class Weather(
     val wind: Wind?
 ) {
     val answerCode by lazy {
-        if (cod is Int)
-            cod
-        else
-            (cod as String).toInt()
+        cod as? Int ?: (cod as String).toInt()
+    }
+
+    fun getWeatherIcon(): String {
+        val icon = weather?.firstOrNull()?.icon.orEmpty()
+        return "https://openweathermap.org/payload/api/media/file/$icon.png"
     }
 }

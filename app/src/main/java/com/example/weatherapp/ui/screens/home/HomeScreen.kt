@@ -27,9 +27,6 @@ fun HomeScreen(
 
     HomeUI.Root(
         state = state,
-        onQueryChange = { viewModel.dispatch(HomeIntent.CityQueryChanged(it)) },
-        onSearchSubmit = { viewModel.dispatch(HomeIntent.SearchSubmitted(it)) },
-        onCityPicked = { viewModel.dispatch(HomeIntent.CityPicked(it)) },
         onRefresh = { viewModel.dispatch(HomeIntent.RefreshWeather) },
         onOpenSettings = { viewModel.dispatch(HomeIntent.OpenSettingsClicked) },
         onRetry = { viewModel.dispatch(HomeIntent.RetryClicked) },

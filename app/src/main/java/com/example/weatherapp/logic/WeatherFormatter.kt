@@ -38,6 +38,12 @@ object WeatherFormatter {
         else -> "F"
     }
 
+    fun windSpeedSymbol(metrics: String): String = when (metrics) {
+        METRIC_STANDARD -> "miles/hour"
+        METRIC_METRIC -> "met/sec"
+        else -> "met/sec"
+    }
+
     /** Индекс названия шкалы (UI резолвит в R.string.kelvin/celsius/fahrenheit). */
     fun scaleIndex(metrics: String): Int = when (metrics) {
         METRIC_STANDARD -> SCALE_KELVIN
