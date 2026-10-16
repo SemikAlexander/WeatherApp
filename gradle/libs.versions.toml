@@ -5,7 +5,10 @@
 # Инструментальный стек
 agp = "8.13.2"                       # Android Gradle Plugin (требует Gradle >= 8.13)
 kotlin = "2.1.21"                    # Язык + KGP; Compose-плагин завязан на эту версию
-composeBom = "2026.09.00"            # BOM: согласованные версии всех compose-артефактов без явных номеров
+# ВАЖНО: BOM 2026.09.00 тянет Compose 1.12.x, который требует compileSdk 37 и AGP >= 9.1.0.
+# Пока проект на AGP 8.13.x / compileSdk 36, используем последний BOM линейки Compose 1.9.x.
+# Миграция на AGP 9.x + SDK 37 — отдельная задача (смена major AGP ломает часть DSL).
+composeBom = "2025.09.00"             # BOM: Compose 1.9.x — совместим с AGP 8.13 / compileSdk 36
 coroutines = "1.11.0"
 
 # AndroidX

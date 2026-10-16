@@ -1,0 +1,11 @@
+# Шаблон local.properties (файл local.properties исключён из VCS через .gitignore).
+# Скопируйте этот файл в local.properties и подставьте свои значения:
+#   cp local.properties.example local.properties
+#
+# Путь к Android SDK на вашей машине (обязателен для сборки):
+#   Windows пример: sdk.dir=C\:\\Users\\<user>\\AppData\\Local\\Android\\Sdk
+#   Linux/macOS пример: sdk.dir=/home/<user>/Android/Sdk
+sdk.dir=
+
+# API-ключ OpenWeatherMap (подставляется в BuildConfig.OWM_API_KEY при сборке):
+OPEN_WEATHER_MAP_API_KEY=your_api_key_here
