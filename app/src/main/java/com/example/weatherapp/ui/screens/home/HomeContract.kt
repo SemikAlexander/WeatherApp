@@ -3,6 +3,8 @@ package com.example.weatherapp.ui.screens.home
 import com.example.weatherapp.api.models.response.cities.CitiesItem
 import com.example.weatherapp.mvi.IaEffect
 import com.example.weatherapp.mvi.IaIntent
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * MVI-контракт экрана Home: Intent (вход), State (единственный источник истины UI),
@@ -33,7 +35,7 @@ sealed interface HomeIntent : IaIntent {
     data object RetryClicked : HomeIntent
 
     /** Внутренний: результат поиска городов пришёл. */
-    data class CitiesLoaded(val cities: List<CitiesItem>) : HomeIntent
+    data class CitiesLoaded(val cities: ImmutableList<CitiesItem>) : HomeIntent
 
     /** Внутренний: поиск городов завершился ошибкой. */
     data object CitiesLoadFailed : HomeIntent
@@ -62,7 +64,7 @@ data class HomeState(
     val isLoading: Boolean = false,
     val hasError: Boolean = false,
     val cityQuery: String = "",
-    val suggestions: List<CitiesItem> = emptyList(),
+    val suggestions: ImmutableList<CitiesItem> = persistentListOf(),
     val isSuggestionsVisible: Boolean = false,
     /** null -> показываем плейсхолдеры вместо данных. */
     val weather: WeatherUi? = null,

@@ -73,6 +73,8 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
 
+    implementation(libs.kotlinx.collections)
+
     // Сеть
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
@@ -93,6 +95,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.swiperefresh)
     // Навигация: Compose Navigation (SingleActivity, маршруты — строки, не nav_graph.xml)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.hilt.navigation.compose)

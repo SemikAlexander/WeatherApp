@@ -16,6 +16,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,8 +34,8 @@ import com.example.weatherapp.ui.components.CircleIconButton
 import com.example.weatherapp.ui.components.SelectableItemRow
 import com.example.weatherapp.ui.components.SettingsRow
 import com.example.weatherapp.ui.screens.home.LaunchedEffectUnit
-import com.example.weatherapp.ui.theme.WeatherAppTheme
-import com.example.weatherapp.ui.theme.WeatherBlue
+import com.example.weatherapp.ui.theme.*
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * Экран Settings (Compose). Элементы UI — в объекте-неймспейсе [SettingsUI].
@@ -90,7 +91,7 @@ object SettingsUI {
             )
         } ?: state.unitsLabel
 
-        Box(modifier = Modifier.fillMaxSize().background(WeatherBlue)) {
+        Box(modifier = Modifier.fillMaxSize().background(c006485)) {
             Column(modifier = Modifier.fillMaxSize()) {
                 HeaderRow(onBack = onBack)
 
@@ -234,7 +235,7 @@ private val PREVIEW_SETTINGS_STATE = SettingsState(
     versionLabel = "1.0.0",
     currentLanguage = ApplicationLanguage("English", "EN"),
     currentMetrics = ApplicationMetrics("metric", "C"),
-    languages = listOf(
+    languages = persistentListOf(
         ApplicationLanguage("English", "EN"),
         ApplicationLanguage("Russian", "RU"),
     ),

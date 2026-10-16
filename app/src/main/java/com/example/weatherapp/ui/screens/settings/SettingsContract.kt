@@ -4,6 +4,8 @@ import com.example.weatherapp.extention.models.ApplicationLanguage
 import com.example.weatherapp.extention.models.ApplicationMetrics
 import com.example.weatherapp.mvi.IaEffect
 import com.example.weatherapp.mvi.IaIntent
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 /** MVI-контракт экрана Settings. */
 
@@ -31,8 +33,8 @@ data class SettingsState(
     val currentMetrics: ApplicationMetrics? = null,
     /** Активный диалог выбора — часть состояния: восстанавливается после ротации. */
     val activeDialog: SettingsDialog = SettingsDialog.NONE,
-    val languages: List<ApplicationLanguage> = emptyList(),
-    val metricsOptions: List<ApplicationMetrics> = emptyList(),
+    val languages: ImmutableList<ApplicationLanguage> = persistentListOf(),
+    val metricsOptions: ImmutableList<ApplicationMetrics> = persistentListOf(),
 )
 
 enum class SettingsDialog { NONE, LANGUAGE, UNITS }

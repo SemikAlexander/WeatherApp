@@ -10,6 +10,8 @@ kotlin = "2.1.21"                    # Язык + KGP; Compose-плагин за
 # Миграция на AGP 9.x + SDK 37 — отдельная задача (смена major AGP ломает часть DSL).
 composeBom = "2025.09.00"             # BOM: Compose 1.9.x — совместим с AGP 8.13 / compileSdk 36
 coroutines = "1.11.0"
+kotlinx-collections-version = "0.4.0"
+swipe-refresh = "0.24.9-beta"
 
 # AndroidX
 coreKtx = "1.17.0"                   # compileSdk 36; 1.19.x требует minSdk 24, у нас minSdk 23
@@ -34,6 +36,7 @@ espresso = "3.6.1"
 [libraries]
 # AndroidX
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+kotlinx-collections = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinx-collections-version" }
 
 androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
@@ -52,6 +55,8 @@ androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "u
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+
+androidx-compose-swiperefresh = { group = "com.google.accompanist", name = "accompanist-swiperefresh", version.ref = "swipe-refresh" }
 
 # Coroutines
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }

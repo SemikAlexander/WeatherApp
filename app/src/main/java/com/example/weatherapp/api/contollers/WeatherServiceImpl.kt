@@ -12,7 +12,6 @@ class WeatherServiceImpl @Inject constructor() : IWeather {
         cityName: String,
         language: String,
         units: String,
-        appid: String,
     ): Weather = weatherRetrofit.create(IWeather::class.java)
         .getWeather(cityName = cityName, language = language, units = units)
 }

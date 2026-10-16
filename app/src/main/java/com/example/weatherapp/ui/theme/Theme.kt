@@ -11,17 +11,18 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-// Палитра перенесена из values/colors.xml — единый источник для Compose-экранов.
-val WeatherBlue = Color(0xFF0099CC)      // mainBackground
-val WeatherBlueDark = Color(0xFF006485)  // backBG / accent
-val InfoTabBackground = Color(0x3CF1EBF1) // mainBackgroundInfoTab (полупрозрачный)
-val ForecastStroke = Color(0xFFEEEEEE)
+val InfoTabBackground = Color(0x3CF1EBF1)
+
+val c212121 = Color(0xFF212121)
+val c323233 = Color(0xFF323233)
+val c0099CC = Color(0xFF0099CC)
+val c006485 = Color(0xFF006485)
 
 private val LightColors = lightColorScheme(
-    primary = WeatherBlue,
-    secondary = WeatherBlueDark,
-    background = WeatherBlue,
-    surface = WeatherBlueDark,
+    primary = c0099CC,
+    secondary = c006485,
+    background = c0099CC,
+    surface = c006485,
     onPrimary = Color.White,
     onSecondary = Color.White,
     onBackground = Color.White,
@@ -29,8 +30,8 @@ private val LightColors = lightColorScheme(
 )
 
 private val DarkColors = darkColorScheme(
-    primary = WeatherBlue,
-    secondary = WeatherBlueDark,
+    primary = c0099CC,
+    secondary = c006485,
     background = Color(0xFF121212),
     surface = Color(0xFF1E1E1E),
 )

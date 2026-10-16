@@ -24,11 +24,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.example.weatherapp.R
-import com.example.weatherapp.ui.theme.InfoTabBackground
-import com.example.weatherapp.ui.theme.WeatherAppTheme
-import com.example.weatherapp.ui.theme.WeatherBlueDark
+import com.example.weatherapp.ui.theme.*
 
 /**
  * Переиспользуемые примитивы UI.
@@ -48,7 +47,7 @@ fun CircleIconButton(
     modifier: Modifier = Modifier,
     size: Int = 44,
     tint: Color = Color.White,
-    containerColor: Color = WeatherBlueDark,
+    containerColor: Color = c006485,
 ) {
     Box(
         modifier = modifier
@@ -61,7 +60,7 @@ fun CircleIconButton(
             painter = painterResource(iconResId),
             contentDescription = contentDescription,
             tint = tint,
-            modifier = Modifier.size((size * 0.55f).dp),
+            modifier = Modifier.size(DpSize(width = size.dp, height = size.dp)),
         )
     }
 }
@@ -77,7 +76,7 @@ fun SettingsRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(WeatherBlueDark)
+            .background(c006485)
             .clickable(onClick = onClick)
             .padding(horizontal = 12.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -160,14 +159,14 @@ fun SelectableItemRow(
         Text(
             text = name,
             style = MaterialTheme.typography.bodyLarge,
-            color = Color.Black,
+            color = Color.White,
             modifier = Modifier.weight(1f),
         )
         if (isSelected) {
             Icon(
                 painter = painterResource(R.drawable.ic_check),
                 contentDescription = stringResource(R.string.save_button),
-                tint = WeatherBlueDark,
+                tint = c006485,
                 modifier = Modifier.size(19.dp),
             )
         }
@@ -181,7 +180,7 @@ fun SelectableItemRow(
 private fun CircleIconButtonPreview() {
     WeatherAppTheme {
         CircleIconButton(
-            iconResId = R.drawable.settings,
+            iconResId = R.drawable.synchronize,
             contentDescription = "Settings",
             onClick = {},
         )
@@ -201,7 +200,7 @@ private fun SettingsRowPreview() {
 private fun InfoTilePreview() {
     WeatherAppTheme {
         InfoTile(
-            iconResId = R.drawable.sunrise,
+            iconResId = R.drawable.ic_sunrise,
             label = stringResource(R.string.sunrise),
             value = "06:40 AM",
             modifier = Modifier.fillMaxWidth(0.33f),

@@ -76,7 +76,7 @@ abstract class MviViewModel<I : IaIntent, S : Any, E : IaEffect> : ViewModel() {
     /**
      * Хелпер: подписка на поток домена с трансформацией в интент экрана.
      * Возвращает [Job] подписки — вызывающий код может явно отменить её;
-     * если результат не нужен, пишите `asIntent(...) // = Job`, но не присваивайте Unit.
+     * если результат не нужен, пишите `asIntent(...) // = Job`.
      */
     protected fun <T> Flow<T>.asIntent(transform: (T) -> I): Job =
         onEach { dispatch(transform(it)) }.launchIn(viewModelScope)

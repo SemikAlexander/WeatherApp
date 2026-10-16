@@ -8,7 +8,9 @@ import com.example.weatherapp.api.interfaces.ICity
 import com.example.weatherapp.api.interfaces.IWeather
 import com.example.weatherapp.logic.WeatherFormatter
 import com.example.weatherapp.mvi.MviViewModel
+import com.example.weatherapp.ui.screens.settings.SettingsIntent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.debounce
@@ -16,8 +18,11 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * MVI-ViewModel экрана Home.
@@ -49,6 +54,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         observeLiveSearch()
+        dispatch(HomeIntent.LoadInitial)
     }
 
     /**
@@ -60,7 +66,7 @@ class HomeViewModel @Inject constructor(
     @OptIn(FlowPreview::class)
     private fun observeLiveSearch() {
         _cityQuery
-            .debounce(SEARCH_DEBOUNCE_MS)
+            .debounce(SEARCH_DEBOUNCE_MS.milliseconds)
             .distinctUntilChanged()
             .onEach { query ->
                 if (query.length >= MIN_QUERY_LENGTH && query != _lastQueried.value) {
@@ -82,7 +88,7 @@ class HomeViewModel @Inject constructor(
         HomeIntent.RetryClicked -> state.copy(isLoading = true, hasError = false)
 
         is HomeIntent.CityQueryChanged -> {
-            _cityQuery.value = intent.query // питаем live-поиск (debounce+distinct внутри)
+            _cityQuery.value = intent.query
             state.copy(
                 cityQuery = intent.query,
                 isSuggestionsVisible = intent.query.length >= MIN_QUERY_LENGTH,
@@ -96,7 +102,7 @@ class HomeViewModel @Inject constructor(
 
         is HomeIntent.CityPicked -> state.copy(
             cityQuery = intent.city.title,
-            suggestions = emptyList(),
+            suggestions = persistentListOf(),
             isSuggestionsVisible = false,
         )
 
@@ -209,10 +215,10 @@ class HomeViewModel @Inject constructor(
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             runCatching { cityService.getCity(query) }
-                .onSuccess { city -> dispatch(HomeIntent.CitiesLoaded(listOf(city))) }
+                .onSuccess { city -> dispatch(HomeIntent.CitiesLoaded(persistentListOf(city))) }
                 .onFailure { t ->
                     if (t is NoSuchElementException) {
-                        dispatch(HomeIntent.CitiesLoaded(emptyList()))
+                        dispatch(HomeIntent.CitiesLoaded(persistentListOf()))
                     } else {
                         dispatch(HomeIntent.CitiesLoadFailed)
                     }

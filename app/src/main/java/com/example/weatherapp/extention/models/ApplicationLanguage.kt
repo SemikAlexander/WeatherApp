@@ -1,6 +1,8 @@
 package com.example.weatherapp.extention.models
 
 import com.example.weatherapp.App
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 data class ApplicationLanguage(
     val language: String,
@@ -22,8 +24,8 @@ data class ApplicationLanguage(
             onReloadApp(App.setting.appLanguage)
         }
 
-        fun getAppLanguageList(): List<ApplicationLanguage> {
-            return listOf(
+        fun getAppLanguageList(): ImmutableList<ApplicationLanguage> {
+            return persistentListOf(
                 ApplicationLanguage(
                     language = "English",
                     languageKey = "EN"

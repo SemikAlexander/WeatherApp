@@ -25,51 +25,57 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor() :
     MviViewModel<SettingsIntent, SettingsState, SettingsEffect>() {
 
+    init { dispatch(SettingsIntent.LoadInitial) }
+
     override fun initialState(): SettingsState = SettingsState()
 
-    override fun reduce(state: SettingsState, intent: SettingsIntent): SettingsState = when (intent) {
-        SettingsIntent.LoadInitial -> {
-            val lang = App.setting.appLanguage
-            val metrics = App.setting.appMetrics
-            state.copy(
-                languageLabel = WeatherFormatter.formatLanguageLabel(lang.language, lang.languageKey),
-                unitsLabel = unitsLabel(metrics),
-                versionLabel = BuildConfig.VERSION_NAME,
-                currentLanguage = lang,
-                currentMetrics = metrics,
-                languages = LanguageLogic.availableLanguages(),
-                metricsOptions = ApplicationMetrics.getMetricsList(),
+    override fun reduce(state: SettingsState, intent: SettingsIntent): SettingsState =
+        when (intent) {
+            SettingsIntent.LoadInitial -> {
+                val lang = App.setting.appLanguage
+                val metrics = App.setting.appMetrics
+                state.copy(
+                    languageLabel = WeatherFormatter.formatLanguageLabel(
+                        lang.language,
+                        lang.languageKey
+                    ),
+                    unitsLabel = unitsLabel(metrics),
+                    versionLabel = BuildConfig.VERSION_NAME,
+                    currentLanguage = lang,
+                    currentMetrics = metrics,
+                    languages = LanguageLogic.availableLanguages(),
+                    metricsOptions = ApplicationMetrics.getMetricsList(),
+                    activeDialog = SettingsDialog.NONE,
+                )
+            }
+
+            SettingsIntent.OpenLanguageDialogClicked ->
+                state.copy(activeDialog = SettingsDialog.LANGUAGE)
+
+            SettingsIntent.OpenUnitsDialogClicked ->
+                state.copy(activeDialog = SettingsDialog.UNITS)
+
+            SettingsIntent.DialogDismissed ->
+                state.copy(activeDialog = SettingsDialog.NONE)
+
+            is SettingsIntent.LanguagePicked -> state.copy(
                 activeDialog = SettingsDialog.NONE,
+                currentLanguage = intent.language,
+                languageLabel = WeatherFormatter.formatLanguageLabel(
+                    intent.language.language, intent.language.languageKey,
+                ),
             )
+
+            is SettingsIntent.UnitsPicked -> state.copy(
+                activeDialog = SettingsDialog.NONE,
+                currentMetrics = intent.metrics,
+                unitsLabel = unitsLabel(intent.metrics),
+            )
+
+            SettingsIntent.BackClicked,
+            SettingsIntent.ExitClicked,
+                -> state // только эффекты
         }
-
-        SettingsIntent.OpenLanguageDialogClicked ->
-            state.copy(activeDialog = SettingsDialog.LANGUAGE)
-
-        SettingsIntent.OpenUnitsDialogClicked ->
-            state.copy(activeDialog = SettingsDialog.UNITS)
-
-        SettingsIntent.DialogDismissed ->
-            state.copy(activeDialog = SettingsDialog.NONE)
-
-        is SettingsIntent.LanguagePicked -> state.copy(
-            activeDialog = SettingsDialog.NONE,
-            currentLanguage = intent.language,
-            languageLabel = WeatherFormatter.formatLanguageLabel(
-                intent.language.language, intent.language.languageKey,
-            ),
-        )
-
-        is SettingsIntent.UnitsPicked -> state.copy(
-            activeDialog = SettingsDialog.NONE,
-            currentMetrics = intent.metrics,
-            unitsLabel = unitsLabel(intent.metrics),
-        )
-
-        SettingsIntent.BackClicked,
-        SettingsIntent.ExitClicked,
-        -> state // только эффекты
-    }
 
     override suspend fun handle(intent: SettingsIntent) {
         when (intent) {

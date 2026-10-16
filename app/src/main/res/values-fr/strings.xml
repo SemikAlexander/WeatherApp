@@ -8,7 +8,7 @@
     <string name="humidity">Humidité</string>
     <string name="created_by">Créé Par</string>
     <string name="update_data">Mis à jour à: %1$s</string>
-    <string name="min_temp">Valeur minimale: %1$s</string>
+    <string name="min_temp">t minimale: %1$s</string>
     <string name="max_temp">t maximum: %1$s</string>
     <string name="save_button">Enregistrer</string>
     <string name="change_data">Données météo mises à jour!</string>

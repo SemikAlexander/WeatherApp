@@ -1,6 +1,7 @@
 package com.example.weatherapp.logic
 
 import com.example.weatherapp.extention.models.ApplicationLanguage
+import kotlinx.collections.immutable.ImmutableList
 import java.util.Locale
 
 /**
@@ -20,7 +21,7 @@ object LanguageLogic {
     fun apiLangParam(languageKey: String): String = localeTag(languageKey)
 
     /** Доступные языки приложения (список — единый источник для экрана настроек). */
-    fun availableLanguages(): List<ApplicationLanguage> = ApplicationLanguage.getAppLanguageList()
+    fun availableLanguages(): ImmutableList<ApplicationLanguage> = ApplicationLanguage.getAppLanguageList()
 
     /** Поиск языка по ключу (case-insensitive); null, если не найден. */
     fun findLanguage(languageKey: String): ApplicationLanguage? =
