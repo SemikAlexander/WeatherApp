@@ -11,7 +11,6 @@ import com.example.weatherapp.mvi.MviViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,22 +42,37 @@ class HomeViewModel @Inject constructor(
     )
     val cityName: StateFlow<String> = _cityName.asStateFlow()
 
+    /** Сырой поток текстового поля; live-поиск подписан на него в [init]. */
+    private val _cityQuery = MutableStateFlow("")
+
     private var searchJob: Job? = null
+
+    init {
+        observeLiveSearch()
+    }
 
     /**
      * Live-поиск городов: distinctUntilChanged отсекает повторные эмиссии того же текста,
-     * debounce схлопывает быстрые последовательные нажатия. Требование UX: обновление
-     * работает и «на лету», и по Enter — оба пути идут через [HomeIntent.SearchSubmitted]/
-     * [HomeIntent.CityQueryChanged], дедупликация ниже исключает двойной запрос.
+     * debounce схлопывает быстрые последовательные нажатия. Enter идёт через
+     * [HomeIntent.SearchSubmitted] (немедленно, с отменю pending-debounce) — дедупликация
+     * по [_lastQueried] исключает двойной запрос одного и того же текста.
      */
     @OptIn(FlowPreview::class)
     private fun observeLiveSearch() {
         _cityQuery
             .debounce(SEARCH_DEBOUNCE_MS)
             .distinctUntilChanged()
-            .onEach { query -> if (query.length >= MIN_QUERY_LENGTH) runCitySearch(query) }
+            .onEach { query ->
+                if (query.length >= MIN_QUERY_LENGTH && query != _lastQueried.value) {
+                    _lastQueried.value = query
+                    runCitySearch(query)
+                }
+            }
             .launchIn(viewModelScope)
     }
+
+    /** Последний текст, по которому реально уходил запрос (защита от дублей live/Enter). */
+    private val _lastQueried = MutableStateFlow("")
 
     override fun initialState(): HomeState = HomeState()
 
@@ -67,7 +81,15 @@ class HomeViewModel @Inject constructor(
         HomeIntent.RefreshWeather,
         HomeIntent.RetryClicked -> state.copy(isLoading = true, hasError = false)
 
-        is HomeIntent.CityQueryChanged -> state.copy(
+        is HomeIntent.CityQueryChanged -> {
+            _cityQuery.value = intent.query // питаем live-поиск (debounce+distinct внутри)
+            state.copy(
+                cityQuery = intent.query,
+                isSuggestionsVisible = intent.query.length >= MIN_QUERY_LENGTH,
+            )
+        }
+
+        is HomeIntent.SearchSubmitted -> state.copy(
             cityQuery = intent.query,
             isSuggestionsVisible = intent.query.length >= MIN_QUERY_LENGTH,
         )
@@ -112,7 +134,13 @@ class HomeViewModel @Inject constructor(
             HomeIntent.RefreshWeather,
             HomeIntent.RetryClicked -> loadWeather()
 
-            is HomeIntent.CityQueryChanged -> scheduleCitySearch(intent.query)
+            is HomeIntent.CityQueryChanged -> Unit // live-путь: reduce уже обновил _cityQuery
+
+            is HomeIntent.SearchSubmitted -> {
+                // Enter: немедленный поиск по тексту, отменяем pending-debounce.
+                searchJob?.cancel()
+                submitSearch(intent.query)
+            }
 
             is HomeIntent.CityPicked -> {
                 _cityName.value = intent.city.title
@@ -165,15 +193,30 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    /** Debounce поиска городов: новый ввод отменяет предыдущий таймер (замена Timer). */
-    private fun scheduleCitySearch(query: String) {
+    /** Enter/Submit: немедленный поиск; дедуп по _lastQueried отсекает повтор live-запроса. */
+    private fun submitSearch(query: String) {
+        if (query.length < MIN_QUERY_LENGTH || query == _lastQueried.value) return
+        _lastQueried.value = query
+        runCitySearch(query)
+    }
+
+    /**
+     * Выполняет запрос поиска городов и разрешает результат в интенты.
+     * Ошибку «город не найден» (NoSuchElementException из [ICity.getCity]) считаем
+     * пустым результатом — подсказки схлопнутся, погоду не трогаем.
+     */
+    private fun runCitySearch(query: String) {
         searchJob?.cancel()
-        if (query.length < MIN_QUERY_LENGTH) return
         searchJob = viewModelScope.launch {
-            delay(SEARCH_DEBOUNCE_MS)
             runCatching { cityService.getCity(query) }
-                .onSuccess { cities -> dispatch(HomeIntent.CitiesLoaded(cities)) }
-                .onFailure { dispatch(HomeIntent.CitiesLoadFailed) }
+                .onSuccess { city -> dispatch(HomeIntent.CitiesLoaded(listOf(city))) }
+                .onFailure { t ->
+                    if (t is NoSuchElementException) {
+                        dispatch(HomeIntent.CitiesLoaded(emptyList()))
+                    } else {
+                        dispatch(HomeIntent.CitiesLoadFailed)
+                    }
+                }
         }
     }
 

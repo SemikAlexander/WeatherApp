@@ -8,6 +8,15 @@ import javax.inject.Singleton
 
 @Singleton
 class CityServiceImpl @Inject constructor() : ICity {
+
     override suspend fun getCities(cityName: String): List<CitiesItem> =
         cityRetrofit.create(ICity::class.java).getCities(cityName)
+
+    /** Первый совпадение — канонический город; пустой список трактуется как ошибка «не найдено». */
+    override suspend fun getCity(query: String, minQueryLength: Int): CitiesItem {
+        require(query.isNotBlank()) { "city query must not be blank" }
+        val cities = getCities(query.trim())
+        return cities.firstOrNull()
+            ?: throw NoSuchElementException("city not found for query: $query")
+    }
 }

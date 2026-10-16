@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -72,7 +73,11 @@ abstract class MviViewModel<I : IaIntent, S : Any, E : IaEffect> : ViewModel() {
         }
     }
 
-    /** Хелпер: подписка на поток домена с трансформацией в интент экрана. */
-    protected fun <T> Flow<T>.asIntent(transform: (T) -> I): Unit =
+    /**
+     * Хелпер: подписка на поток домена с трансформацией в интент экрана.
+     * Возвращает [Job] подписки — вызывающий код может явно отменить её;
+     * если результат не нужен, пишите `asIntent(...) // = Job`, но не присваивайте Unit.
+     */
+    protected fun <T> Flow<T>.asIntent(transform: (T) -> I): Job =
         onEach { dispatch(transform(it)) }.launchIn(viewModelScope)
 }

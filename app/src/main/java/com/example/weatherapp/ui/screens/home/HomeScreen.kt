@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
@@ -27,6 +28,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -69,6 +71,7 @@ fun HomeScreen(
     MainUI.Root(
         state = state,
         onQueryChange = { viewModel.dispatch(HomeIntent.CityQueryChanged(it)) },
+        onSearchSubmit = { viewModel.dispatch(HomeIntent.SearchSubmitted(it)) },
         onCityPicked = { viewModel.dispatch(HomeIntent.CityPicked(it)) },
         onRefresh = { viewModel.dispatch(HomeIntent.RefreshWeather) },
         onOpenSettings = { viewModel.dispatch(HomeIntent.OpenSettingsClicked) },
@@ -83,6 +86,7 @@ object MainUI {
     fun Root(
         state: HomeState,
         onQueryChange: (String) -> Unit,
+        onSearchSubmit: (String) -> Unit,
         onCityPicked: (CitiesItem) -> Unit,
         onRefresh: () -> Unit,
         onOpenSettings: () -> Unit,
@@ -103,6 +107,7 @@ object MainUI {
                         suggestions = state.suggestions,
                         isSuggestionsVisible = state.isSuggestionsVisible,
                         onQueryChange = onQueryChange,
+                        onSearchSubmit = onSearchSubmit,
                         onCityPicked = onCityPicked,
                     )
 
@@ -160,9 +165,11 @@ object MainUI {
         suggestions: List<CitiesItem>,
         isSuggestionsVisible: Boolean,
         onQueryChange: (String) -> Unit,
+        onSearchSubmit: (String) -> Unit,
         onCityPicked: (CitiesItem) -> Unit,
     ) {
         var expanded by remember { mutableStateOf(false) }
+        val focusManager = LocalFocusManager.current
         Box(modifier = Modifier.padding(horizontal = 16.dp)) {
             OutlinedTextField(
                 value = query,
@@ -173,6 +180,13 @@ object MainUI {
                 label = { Text(stringResource(R.string.location)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                keyboardActions = KeyboardActions(
+                    onSearch = {
+                        expanded = false
+                        focusManager.clearFocus() // закрывает клавиатуру; Enter -> немедленный поиск
+                        onSearchSubmit(query)
+                    },
+                ),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedTextColor = Color.White,
                     unfocusedTextColor = Color.White,
@@ -365,6 +379,7 @@ private fun HomeScreenPreview() {
         MainUI.Root(
             state = PREVIEW_STATE,
             onQueryChange = {},
+            onSearchSubmit = {},
             onCityPicked = {},
             onRefresh = {},
             onOpenSettings = {},
@@ -380,6 +395,7 @@ private fun HomeLoadingPreview() {
         MainUI.Root(
             state = PREVIEW_STATE.copy(isLoading = true),
             onQueryChange = {},
+            onSearchSubmit = {},
             onCityPicked = {},
             onRefresh = {},
             onOpenSettings = {},
@@ -395,6 +411,7 @@ private fun HomeErrorPreview() {
         MainUI.Root(
             state = HomeState(hasError = true),
             onQueryChange = {},
+            onSearchSubmit = {},
             onCityPicked = {},
             onRefresh = {},
             onOpenSettings = {},

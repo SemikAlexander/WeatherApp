@@ -17,8 +17,11 @@ sealed interface HomeIntent : IaIntent {
     /** Загрузка погоды по текущему cityName (Pull-to-refresh / выбор из списка / retry). */
     data object RefreshWeather : HomeIntent
 
-    /** Ввод текста в поле города (каждый символьный паттерн; debounce — во ViewModel). */
+    /** Ввод текста в поле города (live-путь; debounce/distinct — во ViewModel). */
     data class CityQueryChanged(val query: String) : HomeIntent
+
+    /** Enter/imeAction Search: немедленный поиск по текущему тексту, минуя debounce. */
+    data class SearchSubmitted(val query: String) : HomeIntent
 
     /** Выбор города из выпадающего списка подсказок. */
     data class CityPicked(val city: CitiesItem) : HomeIntent
