@@ -13,3 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# --- ключи (не коммитить, не пушить) ---
+OPEN_WEATHER_MAP_API_KEY=adb3ecc1532bf5aac42c285ca0d26653
