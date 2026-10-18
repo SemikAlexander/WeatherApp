@@ -5,11 +5,6 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
-/**
- * Экран Home (Compose). Все элементы UI — в объекте-неймспейсе [MainUI]
- * (правило проекта): переиспользуемые кирпичи живут в ui/components, а
- * композиция конкретного экрана инкапсулирована здесь.
- */
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),

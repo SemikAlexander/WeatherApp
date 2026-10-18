@@ -1,6 +1,6 @@
 package com.example.weatherapp.ui.screens.home
 
-import androidx.compose.foundation.Image
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,8 +14,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -25,7 +26,6 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -38,9 +38,6 @@ import com.example.weatherapp.R
 import com.example.weatherapp.ui.components.CircleIconButton
 import com.example.weatherapp.ui.components.SpacerHeight
 import com.example.weatherapp.ui.theme.WeatherAppTheme
-import com.example.weatherapp.ui.theme.c212121
-import com.example.weatherapp.ui.theme.c323233
-import com.example.weatherapp.ui.theme.cFAFAFA
 
 object HomeUI {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -51,10 +48,6 @@ object HomeUI {
         onOpenSettings: () -> Unit,
         onRetry: () -> Unit,
     ) {
-        // Единственный корректный способ управления pull-to-refresh в MVI:
-        // isRefreshing — производная от state.isLoading (один источник истины).
-        // Никаких ручных присваиваний и «синхронизаций» — при завершении запроса
-        // isLoading -> false, recomposition обновит state, индикатор спрячется сам.
         val ptrState = rememberPullToRefreshState()
 
         PullToRefreshBox(
@@ -65,7 +58,11 @@ object HomeUI {
             onRefresh = onRefresh,
             state = ptrState,
         ) {
-            Column(modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
+            ) {
                 TopBar(onOpenSettings = onOpenSettings)
                 SpacerHeight(36)
                 Row(
@@ -219,6 +216,33 @@ object HomeUI {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Icon(
+                            painter = painterResource(R.drawable.ic_clouds),
+                            modifier = Modifier.size(16.dp),
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                        SpacerHeight(14)
+                        Text(
+                            text = state.weather?.clouds.orEmpty(),
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                        SpacerHeight(4)
+                        Text(
+                            text = stringResource(R.string.clouds),
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontSize = 10.sp,
+                            fontWeight = FontWeight.Normal,
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                    }
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
                             painter = painterResource(R.drawable.ic_humidity),
                             modifier = Modifier.size(16.dp),
                             contentDescription = null,
@@ -271,9 +295,7 @@ object HomeUI {
                 }
             }
 
-            if (state.isLoading) {
-                LoadingOverlay()
-            } else if (state.hasError) {
+            AnimatedVisibility(visible = state.hasError) {
                 ErrorOverlay(onRetry = onRetry)
             }
         }
@@ -296,18 +318,6 @@ object HomeUI {
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
             )
-        }
-    }
-
-    @Composable
-    fun LoadingOverlay() {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background.copy(alpha = 0.85f)),
-            contentAlignment = Alignment.Center,
-        ) {
-            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
         }
     }
 
@@ -357,6 +367,7 @@ private val PREVIEW_STATE = HomeState(
         wind = "4 met/s",
         pressure = "1012 hPa",
         humidity = "72",
+        clouds = "100%",
         icon = ""
     ),
 )
@@ -369,19 +380,6 @@ private fun HomeScreenPreview() {
     WeatherAppTheme {
         HomeUI.Root(
             state = PREVIEW_STATE,
-            onRefresh = {},
-            onOpenSettings = {},
-            onRetry = {},
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun HomeLoadingPreview() {
-    WeatherAppTheme {
-        HomeUI.Root(
-            state = PREVIEW_STATE.copy(isLoading = true),
             onRefresh = {},
             onOpenSettings = {},
             onRetry = {},
@@ -412,19 +410,6 @@ private fun HomeScreenDarkPreview() {
     WeatherAppTheme(darkTheme = true) {
         HomeUI.Root(
             state = PREVIEW_STATE,
-            onRefresh = {},
-            onOpenSettings = {},
-            onRetry = {},
-        )
-    }
-}
-
-@Preview(name = "Dark", showBackground = true)
-@Composable
-private fun HomeLoadingDarkPreview() {
-    WeatherAppTheme(darkTheme = true) {
-        HomeUI.Root(
-            state = PREVIEW_STATE.copy(isLoading = true),
             onRefresh = {},
             onOpenSettings = {},
             onRetry = {},

@@ -10,13 +10,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-/**
- * DI-модуль сетевых сервисов.
- *
- * Раньше ViewModel создавала `WeatherServiceImpl()` напрямую — это ломало
- * тестируемость (не подставить fake) и скрытую зависимость от object-синглтонов
- * retrofit с глобальным apiToken. Теперь сервисы инжектятся по интерфейсу.
- */
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {

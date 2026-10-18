@@ -36,15 +36,10 @@ class Setting(context: Context) {
         get() = pref.getInt(Keys.DAILY_COUNT, 16)
         set(value) = pref.edit { putInt(Keys.DAILY_COUNT, value) }
 
-    /** Последний выбранный город — восстанавливается при старте Home-экрана. */
     var lastCityName: String?
         get() = pref.getString(Keys.LAST_CITY_NAME, null)
         set(value) = pref.edit { putString(Keys.LAST_CITY_NAME, value) }
 
-    /**
-     * Тёмная тема включена. По умолчанию — следуем системной теме (null -> isSystemInDarkTheme()).
-     * Хранится триада true/false/null: «принудительно светлая/тёмная/как в системе».
-     */
     var darkModeEnabled: Boolean?
         get() = when (pref.getInt(Keys.DARK_MODE, MODE_SYSTEM)) {
             MODE_ON -> true

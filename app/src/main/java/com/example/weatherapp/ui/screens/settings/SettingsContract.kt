@@ -4,11 +4,10 @@ import com.example.weatherapp.extention.models.ApplicationLanguage
 import com.example.weatherapp.extention.models.ApplicationMetrics
 import com.example.weatherapp.mvi.IaEffect
 import com.example.weatherapp.mvi.IaIntent
-
-/** MVI-контракт экрана Settings. */
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 sealed interface SettingsIntent : IaIntent {
-    /** Первый вход: прочитать текущие язык/единицы/версию из настроек. */
     data object LoadInitial : SettingsIntent
 
     data object OpenLanguageDialogClicked : SettingsIntent
@@ -16,10 +15,8 @@ sealed interface SettingsIntent : IaIntent {
     data class LanguagePicked(val language: ApplicationLanguage) : SettingsIntent
     data class UnitsPicked(val metrics: ApplicationMetrics) : SettingsIntent
 
-    /** Диалог закрыт кнопкой «крестик»/back. */
     data object DialogDismissed : SettingsIntent
 
-    /** Переключатель тёмной темы (вкл/выкл). */
     data class DarkModeToggled(val enabled: Boolean) : SettingsIntent
 
     data object BackClicked : SettingsIntent
@@ -33,8 +30,8 @@ data class SettingsState(
     val currentLanguage: ApplicationLanguage? = null,
     val currentMetrics: ApplicationMetrics? = null,
     val activeDialog: SettingsDialog = SettingsDialog.NONE,
-    val languages: List<ApplicationLanguage> = emptyList(),
-    val metricsOptions: List<ApplicationMetrics> = emptyList(),
+    val languages: ImmutableList<ApplicationLanguage> = persistentListOf(),
+    val metricsOptions: ImmutableList<ApplicationMetrics> = persistentListOf(),
     val isDarkMode: Boolean = false,
 )
 

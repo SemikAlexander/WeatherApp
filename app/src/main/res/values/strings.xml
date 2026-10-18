@@ -3,6 +3,7 @@
     <string name="sunrise">Sunrise</string>
     <string name="sunset">Sunset</string>
     <string name="wind">Wind</string>
+    <string name="clouds">Cloudiness</string>
     <string name="pressure">Pressure</string>
     <string name="humidity">Humidity</string>
     <string name="created_by">Created By</string>

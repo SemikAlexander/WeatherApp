@@ -4,6 +4,7 @@
     <string name="sunrise">Восход солнца</string>
     <string name="sunset">Закат</string>
     <string name="wind">Ветер</string>
+    <string name="clouds">Облачность</string>
     <string name="pressure">Давление</string>
     <string name="humidity">Влажность</string>
     <string name="created_by">Созданный</string>

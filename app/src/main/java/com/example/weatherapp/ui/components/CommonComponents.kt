@@ -32,16 +32,6 @@ import androidx.compose.ui.unit.dp
 import com.example.weatherapp.R
 import com.example.weatherapp.ui.theme.WeatherAppTheme
 
-/**
- * Переиспользуемые примитивы UI.
- *
- * Правило проекта: повторяющиеся элементы выносятся в базовые Composable-функции
- * отсюда; конкретные экраны собирают из этих кирпичей в своих объектах-неймспейсах
- * (см. MainUI / SettingsUI). Каждый элемент имеет @Preview — вёрстку можно править
- * без запуска приложения.
- */
-
-/** Круглая кнопка-иконка (настройки на Home, «назад» на Settings). */
 @Composable
 fun CircleIconButton(
     iconResId: Int,
@@ -68,7 +58,6 @@ fun CircleIconButton(
     }
 }
 
-/** Пункт списка настроек: заголовок + текущее значение + стрелка. */
 @Composable
 fun SettingsRow(
     title: String,
@@ -107,7 +96,6 @@ fun SettingsRow(
     }
 }
 
-/** Переиспользуемая строка настройки с переключателем (тёмная тема). */
 @Composable
 fun SwitchSettingRow(
     title: String,
@@ -140,7 +128,6 @@ fun SwitchSettingRow(
     }
 }
 
-/** Инфо-плитка погоды: иконка + подпись + значение (Sunrise/Sunset/Wind/Pressure/Humidity). */
 @Composable
 fun InfoTile(
     iconResId: Int,
@@ -177,7 +164,6 @@ fun InfoTile(
     }
 }
 
-/** Строка выбора в диалоге настроек: название + галочка у активного варианта. */
 @Composable
 fun SelectableItemRow(
     name: String,
@@ -209,7 +195,7 @@ fun SelectableItemRow(
     }
 }
 
-// ---------- Previews ----------
+// region Previews
 
 @Preview(name = "Light", showBackground = true)
 @Composable
@@ -311,3 +297,5 @@ private fun SelectableItemRowPreview() {
         }
     }
 }
+
+// endregion

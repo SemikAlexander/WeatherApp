@@ -12,9 +12,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.weatherapp.App
 
-// Палитра перенесена из values/colors.xml — единый источник для Compose-экранов.
-// Legacy-палитра: точечные цвета, ещё не переведённые на MaterialTheme-роли
-// (HomeUI/SettingsScreen). Убираются по мере миграции экранов на colorScheme.
 val c212121 = Color(0xFF212121)
 val c323233 = Color(0xFF323233)
 val cFAFAFA = Color(0xFFFAFAFA)
@@ -37,10 +34,6 @@ private val DarkColors = darkColorScheme(
     surface = c323233,
 )
 
-/**
- * Типографика экранов: размеры перенесены из XML-вёрстки (32sp заголовки,
- * 22sp пункты настроек, 12/14sp подписи инфо-плиток).
- */
 private val WeatherTypography = Typography(
     headlineLarge = TextStyle(fontSize = 32.sp, fontWeight = FontWeight.Medium),
     titleLarge = TextStyle(fontSize = 22.sp, fontWeight = FontWeight.Normal),
@@ -49,10 +42,6 @@ private val WeatherTypography = Typography(
     labelSmall = TextStyle(fontSize = 12.sp),
 )
 
-/**
- * Единая точка чтения настройки темы: null -> системная тема,
- * true/false -> принудительная. Используется и в рантайме, и в @Preview.
- */
 @Composable
 fun resolveDarkTheme(): Boolean {
     val stored = runCatching { App.setting.darkModeEnabled }.getOrNull()

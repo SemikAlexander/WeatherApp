@@ -11,22 +11,11 @@ import com.example.weatherapp.mvi.MviViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-/**
- * MVI-ViewModel экрана Settings.
- *
- * Отличия от legacy:
- *  - вместо императивного setContent() после каждого изменения — реактивный
- *    [SettingsState], пересчитываемый редьюсером;
- *  - активный диалог — часть состояния: переживает ротацию (голодный Dialog — нет);
- *  - форматирование подписей делегировано чистым WeatherFormatter/LanguageLogic
- *    и покрыто unit-тестами; Context.getString не используется вовсе (см. ScaleNames).
- */
 @HiltViewModel
 class SettingsViewModel @Inject constructor() :
     MviViewModel<SettingsIntent, SettingsState, SettingsEffect>() {
 
     init {
-        // Самозагрузка: без этого рождается пустое состояние.
         dispatch(SettingsIntent.LoadInitial)
     }
 
@@ -110,16 +99,10 @@ class SettingsViewModel @Inject constructor() :
         }
     }
 
-    /**
-     * Подписка единиц: "Celsius, °C". Название шкалы берётся из [ScaleNames] —
-     * ViewModel принципиально не держит Context (утечка + непроверяемость).
-     * Локализованный резолв делает UI-слой через R.string.* (см. SettingsUI).
-     */
     private fun unitsLabel(metrics: ApplicationMetrics): String =
         WeatherFormatter.formatUnitLabel(ScaleNames.nameOf(metrics.metrics), metrics.metricsKey)
 }
 
-/** Названия температурных шкал; синхронизировано с values/strings.xml (en). */
 object ScaleNames {
     fun nameOf(metrics: String): String = when (metrics) {
         WeatherFormatter.METRIC_STANDARD -> "Kelvin"
@@ -127,7 +110,6 @@ object ScaleNames {
         else -> "Fahrenheit"
     }
 
-    /** Resource id для локализованного отображения в Compose-слое. */
     fun resIdOf(metrics: String): Int = when (metrics) {
         WeatherFormatter.METRIC_STANDARD -> R.string.kelvin
         WeatherFormatter.METRIC_METRIC -> R.string.celsius

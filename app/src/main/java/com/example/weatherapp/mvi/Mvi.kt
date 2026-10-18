@@ -64,18 +64,6 @@ abstract class MviViewModel<I : IaIntent, S : Any, E : IaEffect> : ViewModel() {
     protected fun emitEffect(effect: E) {
         _effects.tryEmit(effect)
     }
-
-    /**
-     * Единая точка входа для всех пользовательских действий.
-     *
-     * ВАЖНО (баг, из-за которого не работал SwipeRefresh): reduce выполнялся
-     * внутри coroutine-dispatcher'а Main — т.е. АСИНХРОННО относительно кадра
-     * Compose. Жест свайпа фиксировался в state до того, как isLoading успевал
-     * стать true, и Accompanist SwipeRefresh мгновенно сбрасывал спиннер —
-     * визуально «рефреш не происходит». Поэтому reduce применяется
-     * СИНХРОННО на текущем потоке (UI-потоке), а суспендируемый handle —
-     * отдельно в viewModelScope.
-     */
     fun dispatch(intent: I) {
         _state.value = reduce(_state.value, intent)
         viewModelScope.launch { handle(intent) }

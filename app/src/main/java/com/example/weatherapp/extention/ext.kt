@@ -11,11 +11,6 @@ fun Context.toast(message: String, duration: Int = Toast.LENGTH_SHORT) =
 fun Context.toast(messageId: Int, duration: Int = Toast.LENGTH_SHORT) =
     Toast.makeText(this, messageId, duration).show()
 
-/**
- * Проверка активного подключения (Wi-Fi/Cellular/Ethernet).
- * Используется одноразово при старте NavHost; постоянный мониторинг —
- * отдельная задача (registerNetworkCallback), polling-корутина удалена как утечка.
- */
 fun isActiveNetworkConnected(context: Context): Boolean {
     val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

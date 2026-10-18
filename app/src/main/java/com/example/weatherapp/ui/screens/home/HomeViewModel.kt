@@ -23,49 +23,28 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
-/**
- * MVI-ViewModel экрана Home.
- *
- * Отличия от legacy HomeViewModel:
- *  - единый immutable [HomeState] вместо нескольких SharedFlow с replay=1;
- *  - сервисы инжектятся через Hilt по интерфейсам (тестируемость, fake в тестах);
- *  - debounce поиска — отменяемый [Job] вместо java.util.Timer (Timer не отменялся
- *    и утекал вместе с эмиссиями в мёртвый экран);
- *  - ошибки сети отделены от успешной загрузки (hasError), а не «emit(null)».
- */
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val weatherService: IWeather,
     private val cityService: ICity,
 ) : MviViewModel<HomeIntent, HomeState, HomeEffect>() {
 
-    /** Текущий город запроса — вне UI-состояния (не рендерится напрямую). */
     private val _cityName = MutableStateFlow(
         runCatching { App.setting.lastCityName }.getOrNull()?.takeIf { it.isNotBlank() }
             ?: DEFAULT_CITY,
     )
     val cityName: StateFlow<String> = _cityName.asStateFlow()
 
-    /** Сырой поток текстового поля; live-поиск подписан на него в [init]. */
     private val _cityQuery = MutableStateFlow("")
 
     private var searchJob: Job? = null
 
     init {
         observeLiveSearch()
-        // Инициализация с рабочими данными, а не пустым состоянием:
-        // 1) резолвим стартовый город (lastCityName ?: DEFAULT_CITY) и показываем в поле;
-        // 2) грузим погоду.
         dispatch(HomeIntent.CityInitialized(_cityName.value))
         dispatch(HomeIntent.LoadInitial)
     }
 
-    /**
-     * Live-поиск городов: distinctUntilChanged отсекает повторные эмиссии того же текста,
-     * debounce схлопывает быстрые последовательные нажатия. Enter идёт через
-     * [HomeIntent.SearchSubmitted] (немедленно, с отменю pending-debounce) — дедупликация
-     * по [_lastQueried] исключает двойной запрос одного и того же текста.
-     */
     @OptIn(FlowPreview::class)
     private fun observeLiveSearch() {
         _cityQuery
@@ -80,7 +59,6 @@ class HomeViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-    /** Последний текст, по которому реально уходил запрос (защита от дублей live/Enter). */
     private val _lastQueried = MutableStateFlow("")
 
     override fun initialState(): HomeState = HomeState()
@@ -131,6 +109,7 @@ class HomeViewModel @Inject constructor(
                 wind = intent.wind,
                 pressure = intent.pressure,
                 humidity = intent.humidity,
+                clouds = intent.clouds,
                 icon = intent.icon
             ),
         )
@@ -146,10 +125,9 @@ class HomeViewModel @Inject constructor(
             HomeIntent.RefreshWeather,
             HomeIntent.RetryClicked -> loadWeather()
 
-            is HomeIntent.CityQueryChanged -> Unit // live-путь: reduce уже обновил _cityQuery
+            is HomeIntent.CityQueryChanged -> Unit
 
             is HomeIntent.SearchSubmitted -> {
-                // Enter: немедленный поиск по тексту, отменяем pending-debounce.
                 searchJob?.cancel()
                 submitSearch(intent.query)
             }
@@ -161,7 +139,7 @@ class HomeViewModel @Inject constructor(
 
             HomeIntent.OpenSettingsClicked -> emitEffect(HomeEffect.NavigateToSettings)
 
-            else -> Unit // внутренние интенты результатов — только reduce
+            else -> Unit
         }
     }
 
@@ -197,8 +175,9 @@ class HomeViewModel @Inject constructor(
                             sunrise = WeatherFormatter.formatDate(sys?.sunrise, TIME_PATTERN),
                             sunset = WeatherFormatter.formatDate(sys?.sunset, TIME_PATTERN),
                             wind = "${weather.wind?.speed?.toInt() ?: 0} $windSymbol",
-                            pressure = main?.pressure?.toString().orEmpty() + "hPa",
+                            pressure = "${main?.pressure?.toString().orEmpty()} hPa",
                             humidity = main?.humidity?.toString().orEmpty(),
+                            clouds = "${weather.clouds?.all ?: 100}%",
                             icon = weather.getWeatherIcon()
                         ),
                     )
@@ -211,18 +190,12 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    /** Enter/Submit: немедленный поиск; дедуп по _lastQueried отсекает повтор live-запроса. */
     private fun submitSearch(query: String) {
         if (query.length < MIN_QUERY_LENGTH || query == _lastQueried.value) return
         _lastQueried.value = query
         runCitySearch(query)
     }
 
-    /**
-     * Выполняет запрос поиска городов и разрешает результат в интенты.
-     * Ошибку «город не найден» (NoSuchElementException из [ICity.getCity]) считаем
-     * пустым результатом — подсказки схлопнутся, погоду не трогаем.
-     */
     private fun runCitySearch(query: String) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
@@ -245,7 +218,6 @@ class HomeViewModel @Inject constructor(
         const val DATE_PATTERN_UPDATE = "dd/MM/yyyy hh:mm a"
         const val TIME_PATTERN = "hh:mm a"
 
-        /** Резолв локализованных шаблонов («Updated at», «Min t») — делает UI-слой. */
         fun updatedLabel(context: Context, date: String): String =
             context.getString(R.string.update_data, date)
 

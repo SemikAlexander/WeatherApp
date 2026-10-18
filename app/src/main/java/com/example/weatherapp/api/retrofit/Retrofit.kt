@@ -13,7 +13,7 @@ private fun loggingInterceptor(): HttpLoggingInterceptor =
         level = if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor.Level.BODY
         } else {
-            HttpLoggingInterceptor.Level.NONE // в release тело ответа не пишем в logcat
+            HttpLoggingInterceptor.Level.NONE
         }
     }
 

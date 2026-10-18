@@ -4,6 +4,7 @@
     <string name="sunrise">Amanecer</string>
     <string name="sunset">Puesta</string>
     <string name="wind">Viento</string>
+    <string name="clouds">Nubosidad</string>
     <string name="pressure">Presión</string>
     <string name="humidity">Humedad</string>
     <string name="created_by">Creado Por</string>
