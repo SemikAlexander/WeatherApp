@@ -113,7 +113,7 @@ class HomeViewModel @Inject constructor(
 
         is HomeIntent.CitiesLoaded -> state.copy(suggestions = intent.cities)
 
-        HomeIntent.CitiesLoadFailed -> state // подсказки некритичны: молча сохраняем старые
+        HomeIntent.CitiesLoadFailed -> state
 
         is HomeIntent.WeatherLoaded -> state.copy(
             isLoading = false,
@@ -137,7 +137,7 @@ class HomeViewModel @Inject constructor(
 
         HomeIntent.WeatherLoadFailed -> state.copy(isLoading = false, hasError = true)
 
-        HomeIntent.OpenSettingsClicked -> state // только эффект
+        HomeIntent.OpenSettingsClicked -> state
     }
 
     override suspend fun handle(intent: HomeIntent) {

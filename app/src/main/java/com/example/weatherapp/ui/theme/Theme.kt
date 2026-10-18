@@ -10,9 +10,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.example.weatherapp.App
 
-val InfoTabBackground = Color(0x3CF1EBF1)
-
+// Палитра перенесена из values/colors.xml — единый источник для Compose-экранов.
+// Legacy-палитра: точечные цвета, ещё не переведённые на MaterialTheme-роли
+// (HomeUI/SettingsScreen). Убираются по мере миграции экранов на colorScheme.
 val c212121 = Color(0xFF212121)
 val c323233 = Color(0xFF323233)
 val cFAFAFA = Color(0xFFFAFAFA)
@@ -47,9 +49,19 @@ private val WeatherTypography = Typography(
     labelSmall = TextStyle(fontSize = 12.sp),
 )
 
+/**
+ * Единая точка чтения настройки темы: null -> системная тема,
+ * true/false -> принудительная. Используется и в рантайме, и в @Preview.
+ */
+@Composable
+fun resolveDarkTheme(): Boolean {
+    val stored = runCatching { App.setting.darkModeEnabled }.getOrNull()
+    return stored ?: isSystemInDarkTheme()
+}
+
 @Composable
 fun WeatherAppTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = resolveDarkTheme(),
     content: @Composable () -> Unit,
 ) {
     MaterialTheme(

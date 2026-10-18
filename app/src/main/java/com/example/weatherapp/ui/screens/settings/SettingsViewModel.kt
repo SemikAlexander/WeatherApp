@@ -48,6 +48,7 @@ class SettingsViewModel @Inject constructor() :
                     currentMetrics = metrics,
                     languages = LanguageLogic.availableLanguages(),
                     metricsOptions = ApplicationMetrics.getMetricsList(),
+                    isDarkMode = App.setting.darkModeEnabled ?: false,
                     activeDialog = SettingsDialog.NONE,
                 )
             }
@@ -60,6 +61,9 @@ class SettingsViewModel @Inject constructor() :
 
             SettingsIntent.DialogDismissed ->
                 state.copy(activeDialog = SettingsDialog.NONE)
+
+            is SettingsIntent.DarkModeToggled ->
+                state.copy(isDarkMode = intent.enabled)
 
             is SettingsIntent.LanguagePicked -> state.copy(
                 activeDialog = SettingsDialog.NONE,
@@ -91,6 +95,13 @@ class SettingsViewModel @Inject constructor() :
 
             is SettingsIntent.UnitsPicked ->
                 App.setting.appMetrics = intent.metrics
+
+            is SettingsIntent.DarkModeToggled -> {
+                if (App.setting.darkModeEnabled != intent.enabled) {
+                    App.setting.darkModeEnabled = intent.enabled
+                    emitEffect(SettingsEffect.RestartForTheme)
+                }
+            }
 
             SettingsIntent.BackClicked -> emitEffect(SettingsEffect.NavigateBack)
             SettingsIntent.ExitClicked -> emitEffect(SettingsEffect.ExitApp)

@@ -53,7 +53,7 @@ object HomeUI {
         SwipeRefresh(
             modifier = Modifier
                 .fillMaxSize()
-                .background(c212121),
+                .background(MaterialTheme.colorScheme.background),
             state = swipeRefreshState,
             onRefresh = onRefresh
         ) {
@@ -65,7 +65,7 @@ object HomeUI {
                         .padding(horizontal = 24.dp)
                         .fillMaxWidth()
                         .background(
-                            color = c323233,
+                            color = MaterialTheme.colorScheme.surface,
                             shape = RoundedCornerShape(size = 30.dp)
                         )
                         .padding(horizontal = 25.dp, vertical = 32.dp),
@@ -77,7 +77,7 @@ object HomeUI {
                             text = state.weather?.updatedAt.orEmpty(),
                             style = MaterialTheme.typography.bodyMedium,
                             fontSize = 10.sp,
-                            color = cFAFAFA,
+                            color = MaterialTheme.colorScheme.secondary,
                         )
                         SpacerHeight(4)
                         Text(
@@ -85,7 +85,7 @@ object HomeUI {
                             style = MaterialTheme.typography.bodyMedium,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Medium,
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.primary,
                         )
                         SpacerHeight(8)
                         Text(
@@ -93,7 +93,7 @@ object HomeUI {
                             style = MaterialTheme.typography.bodyLarge,
                             fontSize = 40.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.primary,
                         )
                     }
 
@@ -113,7 +113,7 @@ object HomeUI {
                         .padding(horizontal = 24.dp)
                         .fillMaxWidth()
                         .background(
-                            color = c323233,
+                            color = MaterialTheme.colorScheme.surface,
                             shape = RoundedCornerShape(size = 30.dp)
                         )
                         .padding(horizontal = 25.dp, vertical = 16.dp),
@@ -128,7 +128,7 @@ object HomeUI {
                             painter = painterResource(R.drawable.ic_sunrise),
                             modifier = Modifier.size(24.dp),
                             contentDescription = null,
-                            tint = Color.White
+                            tint = MaterialTheme.colorScheme.primary
                         )
                         SpacerHeight(4)
                         Text(
@@ -136,17 +136,16 @@ object HomeUI {
                             style = MaterialTheme.typography.bodyLarge,
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Normal,
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.primary,
                         )
                     }
-                    Image(
+                    Icon(
                         modifier = Modifier
                             .wrapContentHeight()
                             .weight(0.64f),
                         painter = painterResource(R.drawable.sunset_to_sunrise),
                         contentDescription = null,
-                        contentScale = ContentScale.FillWidth,
-                        alignment = Alignment.BottomCenter
+                        tint = MaterialTheme.colorScheme.primary
                     )
                     Column(
                         modifier = Modifier.weight(0.18f),
@@ -156,7 +155,7 @@ object HomeUI {
                             painter = painterResource(R.drawable.ic_sunset),
                             modifier = Modifier.size(24.dp),
                             contentDescription = null,
-                            tint = Color.White
+                            tint = MaterialTheme.colorScheme.primary
                         )
                         SpacerHeight(4)
                         Text(
@@ -164,7 +163,7 @@ object HomeUI {
                             style = MaterialTheme.typography.bodyLarge,
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Normal,
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.primary,
                         )
                     }
                 }
@@ -174,7 +173,7 @@ object HomeUI {
                         .padding(horizontal = 24.dp)
                         .fillMaxWidth()
                         .background(
-                            color = c323233,
+                            color = MaterialTheme.colorScheme.surface,
                             shape = RoundedCornerShape(size = 30.dp)
                         )
                         .padding(horizontal = 25.dp, vertical = 16.dp),
@@ -188,7 +187,7 @@ object HomeUI {
                             painter = painterResource(R.drawable.ic_wind),
                             modifier = Modifier.size(16.dp),
                             contentDescription = null,
-                            tint = Color.White
+                            tint = MaterialTheme.colorScheme.primary
                         )
                         SpacerHeight(14)
                         Text(
@@ -196,7 +195,7 @@ object HomeUI {
                             style = MaterialTheme.typography.bodyLarge,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.primary,
                         )
                         SpacerHeight(4)
                         Text(
@@ -204,7 +203,7 @@ object HomeUI {
                             style = MaterialTheme.typography.bodyLarge,
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Normal,
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.primary,
                         )
                     }
                     Column(
@@ -215,7 +214,7 @@ object HomeUI {
                             painter = painterResource(R.drawable.ic_humidity),
                             modifier = Modifier.size(16.dp),
                             contentDescription = null,
-                            tint = Color.White
+                            tint = MaterialTheme.colorScheme.primary
                         )
                         SpacerHeight(14)
                         Text(
@@ -223,7 +222,7 @@ object HomeUI {
                             style = MaterialTheme.typography.bodyLarge,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.primary,
                         )
                         SpacerHeight(4)
                         Text(
@@ -231,7 +230,7 @@ object HomeUI {
                             style = MaterialTheme.typography.bodyLarge,
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Normal,
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.primary,
                         )
                     }
                     Column(
@@ -242,7 +241,7 @@ object HomeUI {
                             painter = painterResource(R.drawable.pressure),
                             modifier = Modifier.size(16.dp),
                             contentDescription = null,
-                            tint = Color.White
+                            tint = MaterialTheme.colorScheme.primary
                         )
                         SpacerHeight(14)
                         Text(
@@ -250,7 +249,7 @@ object HomeUI {
                             style = MaterialTheme.typography.bodyLarge,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.primary,
                         )
                         SpacerHeight(4)
                         Text(
@@ -258,7 +257,7 @@ object HomeUI {
                             style = MaterialTheme.typography.bodyLarge,
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Normal,
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.primary,
                         )
                     }
                 }
@@ -287,7 +286,7 @@ object HomeUI {
                     .clickable(onClick = onOpenSettings),
                 painter = painterResource(R.drawable.ic_menu),
                 contentDescription = null,
-                tint = Color.White,
+                tint = MaterialTheme.colorScheme.primary,
             )
         }
     }
@@ -297,10 +296,10 @@ object HomeUI {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(c212121.copy(alpha = 0.85f)),
+                .background(MaterialTheme.colorScheme.background.copy(alpha = 0.85f)),
             contentAlignment = Alignment.Center,
         ) {
-            CircularProgressIndicator(color = Color.White)
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
         }
     }
 
@@ -309,23 +308,23 @@ object HomeUI {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(c212121.copy(alpha = 0.9f)),
+                .background(MaterialTheme.colorScheme.background.copy(alpha = 0.9f)),
             contentAlignment = Alignment.Center,
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Icon(
                     painter = painterResource(R.drawable.ic_error),
                     contentDescription = null,
-                    tint = Color.White,
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(48.dp),
                 )
                 Spacer(Modifier.height(12.dp))
-                Text(stringResource(R.string.error), color = Color.White)
+                Text(stringResource(R.string.error), color = MaterialTheme.colorScheme.primary)
                 Spacer(Modifier.height(12.dp))
                 CircleIconButton(
                     iconResId = R.drawable.synchronize,
                     contentDescription = stringResource(R.string.save_button),
-                    containerColor = c323233,
+                    containerColor = MaterialTheme.colorScheme.surface,
                     onClick = onRetry,
                 )
             }
@@ -353,6 +352,8 @@ private val PREVIEW_STATE = HomeState(
         icon = ""
     ),
 )
+
+// region LIGHT THEME
 
 @Preview(showBackground = true)
 @Composable
@@ -392,5 +393,50 @@ private fun HomeErrorPreview() {
         )
     }
 }
+
+// endregion
+
+// region DARK THEME
+
+@Preview(name = "Dark", showBackground = true)
+@Composable
+private fun HomeScreenDarkPreview() {
+    WeatherAppTheme(darkTheme = true) {
+        HomeUI.Root(
+            state = PREVIEW_STATE,
+            onRefresh = {},
+            onOpenSettings = {},
+            onRetry = {},
+        )
+    }
+}
+
+@Preview(name = "Dark", showBackground = true)
+@Composable
+private fun HomeLoadingDarkPreview() {
+    WeatherAppTheme(darkTheme = true) {
+        HomeUI.Root(
+            state = PREVIEW_STATE.copy(isLoading = true),
+            onRefresh = {},
+            onOpenSettings = {},
+            onRetry = {},
+        )
+    }
+}
+
+@Preview(name = "Dark", showBackground = true)
+@Composable
+private fun HomeErrorDarkPreview() {
+    WeatherAppTheme(darkTheme = true) {
+        HomeUI.Root(
+            state = HomeState(hasError = true),
+            onRefresh = {},
+            onOpenSettings = {},
+            onRetry = {},
+        )
+    }
+}
+
+// endregion
 
 // endregion Previews
