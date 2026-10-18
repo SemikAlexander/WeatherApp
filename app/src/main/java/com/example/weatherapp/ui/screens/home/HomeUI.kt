@@ -20,12 +20,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import kotlinx.coroutines.flow.distinctUntilChanged
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -50,6 +53,24 @@ object HomeUI {
         onRetry: () -> Unit,
     ) {
         val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = state.isLoading)
+
+        // Синхронизация «state — источник истины» <-> «локальный drag-статус widget'а».
+        // 1) isLoading стал true (например, рефреш запущен не свайпом: выбор города,
+        //    retry, стартовая загрузка) — показываем спиннер принудительно;
+        // 2) isLoading стал false — гарантированно убираем спиннер, даже если
+        //    widget сам его не сбросил.
+        LaunchedEffect(swipeRefreshState, state.isLoading) {
+            snapshotFlow { state.isLoading }
+                .distinctUntilChanged()
+                .collect { refreshing ->
+                    if (refreshing && !swipeRefreshState.isRefreshing) {
+                        swipeRefreshState.isRefreshing = true
+                    } else if (!refreshing && swipeRefreshState.isRefreshing) {
+                        swipeRefreshState.isRefreshing = false
+                    }
+                }
+        }
+
         SwipeRefresh(
             modifier = Modifier
                 .fillMaxSize()
