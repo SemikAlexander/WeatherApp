@@ -16,19 +16,19 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import kotlinx.coroutines.flow.distinctUntilChanged
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,10 +41,9 @@ import com.example.weatherapp.ui.theme.WeatherAppTheme
 import com.example.weatherapp.ui.theme.c212121
 import com.example.weatherapp.ui.theme.c323233
 import com.example.weatherapp.ui.theme.cFAFAFA
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 object HomeUI {
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun Root(
         state: HomeState,
@@ -52,31 +51,19 @@ object HomeUI {
         onOpenSettings: () -> Unit,
         onRetry: () -> Unit,
     ) {
-        val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = state.isLoading)
+        // Единственный корректный способ управления pull-to-refresh в MVI:
+        // isRefreshing — производная от state.isLoading (один источник истины).
+        // Никаких ручных присваиваний и «синхронизаций» — при завершении запроса
+        // isLoading -> false, recomposition обновит state, индикатор спрячется сам.
+        val ptrState = rememberPullToRefreshState()
 
-        // Синхронизация «state — источник истины» <-> «локальный drag-статус widget'а».
-        // 1) isLoading стал true (например, рефреш запущен не свайпом: выбор города,
-        //    retry, стартовая загрузка) — показываем спиннер принудительно;
-        // 2) isLoading стал false — гарантированно убираем спиннер, даже если
-        //    widget сам его не сбросил.
-        LaunchedEffect(swipeRefreshState, state.isLoading) {
-            snapshotFlow { state.isLoading }
-                .distinctUntilChanged()
-                .collect { refreshing ->
-                    if (refreshing && !swipeRefreshState.isRefreshing) {
-                        swipeRefreshState.isRefreshing = true
-                    } else if (!refreshing && swipeRefreshState.isRefreshing) {
-                        swipeRefreshState.isRefreshing = false
-                    }
-                }
-        }
-
-        SwipeRefresh(
+        PullToRefreshBox(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background),
-            state = swipeRefreshState,
-            onRefresh = onRefresh
+            isRefreshing = state.isLoading,
+            onRefresh = onRefresh,
+            state = ptrState,
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
                 TopBar(onOpenSettings = onOpenSettings)

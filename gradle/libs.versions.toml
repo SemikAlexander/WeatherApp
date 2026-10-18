@@ -11,7 +11,9 @@ kotlin = "2.1.21"                    # Язык + KGP; Compose-плагин за
 composeBom = "2025.09.00"             # BOM: Compose 1.9.x — совместим с AGP 8.13 / compileSdk 36
 coroutines = "1.11.0"
 kotlinx-collections-version = "0.4.0"
-swipe-refresh = "0.24.9-beta"
+# Accompanist SwipeRefresh удалён: он был НЕ подключён как зависимость (только в libs.versions.toml),
+# поэтому HomeUI не компилировался — главный кандидат на «причину неработающего рефреша».
+# Заменён на нативный androidx.compose.material3.pulltorefresh (входит в BOM).
 
 # AndroidX
 coreKtx = "1.17.0"                   # compileSdk 36; 1.19.x требует minSdk 24, у нас minSdk 23
@@ -55,8 +57,6 @@ androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "u
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
-
-androidx-compose-swiperefresh = { group = "com.google.accompanist", name = "accompanist-swiperefresh", version.ref = "swipe-refresh" }
 
 # Coroutines
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }

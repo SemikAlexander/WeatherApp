@@ -95,7 +95,8 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.swiperefresh)
+    // Pull-to-refresh: нативный material3 (androidx.compose.material3.pulltorefresh),
+    // версия из BOM. Accompanist-зависимость не нужна.
     // Навигация: Compose Navigation (SingleActivity, маршруты — строки, не nav_graph.xml)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.hilt.navigation.compose)
