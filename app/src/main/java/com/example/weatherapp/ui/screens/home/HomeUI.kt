@@ -3,6 +3,7 @@ package com.example.weatherapp.ui.screens.home
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,6 +39,8 @@ import com.example.weatherapp.R
 import com.example.weatherapp.ui.components.CircleIconButton
 import com.example.weatherapp.ui.components.SpacerHeight
 import com.example.weatherapp.ui.theme.WeatherAppTheme
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 object HomeUI {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -296,6 +299,11 @@ object HomeUI {
                         )
                     }
                 }
+                if (state.forecast.isNotEmpty()) {
+                    SpacerHeight(20)
+                    ForecastSection(forecast = state.forecast)
+                }
+                SpacerHeight(24)
             }
 
             AnimatedVisibility(visible = state.hasError) {
@@ -303,6 +311,85 @@ object HomeUI {
             }
         }
     }
+
+    @Composable
+    fun ForecastSection(
+        forecast: ImmutableList<ForecastUi>,
+        modifier: Modifier = Modifier,
+    ) {
+        Column(modifier = modifier.fillMaxWidth()) {
+            Text(
+                text = stringResource(R.string.forecast),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(horizontal = 24.dp),
+            )
+            SpacerHeight(12)
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 24.dp)
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                forecast.forEach { item ->
+                    ForecastCard(
+                        item = item,
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun ForecastCard(
+        item: ForecastUi,
+        modifier: Modifier = Modifier,
+    ) {
+        Column(
+            modifier = modifier
+                .background(
+                    color = MaterialTheme.colorScheme.surface,
+                    shape = RoundedCornerShape(size = 24.dp),
+                )
+                .padding(horizontal = 6.dp, vertical = 12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                text = item.horizon.label(),
+                style = MaterialTheme.typography.bodyMedium,
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colorScheme.secondary,
+            )
+            SpacerHeight(8)
+            AsyncImage(
+                model = item.icon,
+                contentDescription = item.description,
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.size(36.dp),
+            )
+            SpacerHeight(8)
+            Text(
+                text = item.temperature,
+                style = MaterialTheme.typography.bodyLarge,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.primary,
+            )
+        }
+    }
+
+    @Composable
+    private fun ForecastHorizon.label(): String = stringResource(
+        when (this) {
+            ForecastHorizon.IN_3_HOURS -> R.string.forecast_in_3_hours
+            ForecastHorizon.IN_6_HOURS -> R.string.forecast_in_6_hours
+            ForecastHorizon.IN_12_HOURS -> R.string.forecast_in_12_hours
+            ForecastHorizon.IN_24_HOURS -> R.string.forecast_in_24_hours
+        }
+    )
 
     @Composable
     fun TopBar(
@@ -382,6 +469,12 @@ private val PREVIEW_STATE = HomeState(
         clouds = "100%",
         icon = ""
     ),
+    forecast = persistentListOf(
+        ForecastUi(ForecastHorizon.IN_3_HOURS, "15°C", "Light rain", ""),
+        ForecastUi(ForecastHorizon.IN_6_HOURS, "14°C", "Clouds", ""),
+        ForecastUi(ForecastHorizon.IN_12_HOURS, "17°C", "Clear sky", ""),
+        ForecastUi(ForecastHorizon.IN_24_HOURS, "16°C", "Broken clouds", ""),
+    ),
 )
 
 // region LIGHT THEME
@@ -412,6 +505,14 @@ private fun HomeErrorPreview() {
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+private fun ForecastSectionPreview() {
+    WeatherAppTheme {
+        HomeUI.ForecastSection(forecast = PREVIEW_STATE.forecast)
+    }
+}
+
 // endregion
 
 // region DARK THEME
@@ -439,6 +540,14 @@ private fun HomeErrorDarkPreview() {
             onOpenSettings = {},
             onRetry = {},
         )
+    }
+}
+
+@Preview(name = "Dark", showBackground = true)
+@Composable
+private fun ForecastSectionDarkPreview() {
+    WeatherAppTheme(darkTheme = true) {
+        HomeUI.ForecastSection(forecast = PREVIEW_STATE.forecast)
     }
 }
 

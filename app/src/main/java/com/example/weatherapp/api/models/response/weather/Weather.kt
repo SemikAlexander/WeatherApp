@@ -17,8 +17,5 @@ data class Weather(
         cod as? Int ?: (cod as String).toInt()
     }
 
-    fun getWeatherIcon(): String {
-        val icon = weather?.firstOrNull()?.icon.orEmpty()
-        return "https://openweathermap.org/payload/api/media/file/$icon.png"
-    }
+    fun getWeatherIcon(): String = weatherIconUrl(weather?.firstOrNull()?.icon)
 }

@@ -35,6 +35,13 @@
     <string name="today">Hoy</string>
     <string name="tomorrow">Mañana</string>
 
+    <!-- FORECAST -->
+    <string name="forecast">Pronóstico</string>
+    <string name="forecast_in_3_hours">+3 h</string>
+    <string name="forecast_in_6_hours">+6 h</string>
+    <string name="forecast_in_12_hours">+12 h</string>
+    <string name="forecast_in_24_hours">+24 h</string>
+
     <string name="internet_error">La conexión a Internet se ha perdido.</string>
 
     <string name="fahrenheit">Fahrenheit</string>

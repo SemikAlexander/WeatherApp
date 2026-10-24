@@ -35,6 +35,13 @@
     <string name="today">Сегодня</string>
     <string name="tomorrow">Завтра</string>
 
+    <!-- FORECAST -->
+    <string name="forecast">Прогноз</string>
+    <string name="forecast_in_3_hours">+3 ч</string>
+    <string name="forecast_in_6_hours">+6 ч</string>
+    <string name="forecast_in_12_hours">+12 ч</string>
+    <string name="forecast_in_24_hours">+24 ч</string>
+
     <string name="internet_error">Связь с интернетом потеряна.</string>
 
     <string name="fahrenheit">Фаренгейт</string>

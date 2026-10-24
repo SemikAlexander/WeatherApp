@@ -2,6 +2,8 @@ package com.example.weatherapp.ui.screens.home
 
 import com.example.weatherapp.mvi.IaEffect
 import com.example.weatherapp.mvi.IaIntent
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 sealed interface HomeIntent : IaIntent {
     data object LoadInitial : HomeIntent
@@ -33,12 +35,17 @@ sealed interface HomeIntent : IaIntent {
     ) : HomeIntent
 
     data object WeatherLoadFailed : HomeIntent
+
+    data class ForecastLoaded(val forecast: ImmutableList<ForecastUi>) : HomeIntent
+    data object ForecastLoadFailed : HomeIntent
+    data object ForecastCleared : HomeIntent
 }
 
 data class HomeState(
     val isLoading: Boolean = false,
     val hasError: Boolean = false,
     val weather: WeatherUi? = null,
+    val forecast: ImmutableList<ForecastUi> = persistentListOf(),
 ) {
     companion object {
         val EMPTY_WEATHER = WeatherUi(
@@ -59,6 +66,20 @@ data class HomeState(
         )
     }
 }
+
+enum class ForecastHorizon {
+    IN_3_HOURS,
+    IN_6_HOURS,
+    IN_12_HOURS,
+    IN_24_HOURS,
+}
+
+data class ForecastUi(
+    val horizon: ForecastHorizon,
+    val temperature: String,
+    val description: String,
+    val icon: String,
+)
 
 data class WeatherUi(
     val city: String,
