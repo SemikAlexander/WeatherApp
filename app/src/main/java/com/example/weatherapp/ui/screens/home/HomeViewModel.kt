@@ -4,62 +4,31 @@ import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.example.weatherapp.App
 import com.example.weatherapp.R
-import com.example.weatherapp.api.interfaces.ICity
 import com.example.weatherapp.api.interfaces.IWeather
+import com.example.weatherapp.api.models.response.geocoding.GeoCity
 import com.example.weatherapp.logic.WeatherFormatter
 import com.example.weatherapp.mvi.MviViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.milliseconds
 
+/**
+ * Погода для города, выбранного в настройках.
+ *
+ * Выбора города на главном экране нет: экран только отображает данные и умеет
+ * подхватить новую настройку при возврате из Settings (см. [HomeIntent.ScreenShown]).
+ */
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val weatherService: IWeather,
-    private val cityService: ICity,
 ) : MviViewModel<HomeIntent, HomeState, HomeEffect>() {
 
-    private val _cityName = MutableStateFlow(
-        runCatching { App.setting.lastCityName }.getOrNull()?.takeIf { it.isNotBlank() }
-            ?: DEFAULT_CITY,
-    )
-    val cityName: StateFlow<String> = _cityName.asStateFlow()
-
-    private val _cityQuery = MutableStateFlow("")
-
-    private var searchJob: Job? = null
+    /** Город, для которого сейчас загружены (или загружаются) данные. */
+    private var loadedCity: GeoCity = App.setting.selectedCity
 
     init {
-        observeLiveSearch()
-        dispatch(HomeIntent.CityInitialized(_cityName.value))
         dispatch(HomeIntent.LoadInitial)
     }
-
-    @OptIn(FlowPreview::class)
-    private fun observeLiveSearch() {
-        _cityQuery
-            .debounce(SEARCH_DEBOUNCE_MS.milliseconds)
-            .distinctUntilChanged()
-            .onEach { query ->
-                if (query.length >= MIN_QUERY_LENGTH && query != _lastQueried.value) {
-                    _lastQueried.value = query
-                    runCitySearch(query)
-                }
-            }
-            .launchIn(viewModelScope)
-    }
-
-    private val _lastQueried = MutableStateFlow("")
 
     override fun initialState(): HomeState = HomeState()
 
@@ -68,30 +37,8 @@ class HomeViewModel @Inject constructor(
         HomeIntent.RefreshWeather,
         HomeIntent.RetryClicked -> state.copy(isLoading = true, hasError = false)
 
-        is HomeIntent.CityQueryChanged -> {
-            _cityQuery.value = intent.query
-            state.copy(
-                cityQuery = intent.query,
-                isSuggestionsVisible = intent.query.length >= MIN_QUERY_LENGTH,
-            )
-        }
-
-        is HomeIntent.SearchSubmitted -> state.copy(
-            cityQuery = intent.query,
-            isSuggestionsVisible = intent.query.length >= MIN_QUERY_LENGTH,
-        )
-
-        is HomeIntent.CityPicked -> state.copy(
-            cityQuery = intent.city.title,
-            suggestions = persistentListOf(),
-            isSuggestionsVisible = false,
-        )
-
-        is HomeIntent.CityInitialized -> state.copy(cityQuery = intent.city)
-
-        is HomeIntent.CitiesLoaded -> state.copy(suggestions = intent.cities)
-
-        HomeIntent.CitiesLoadFailed -> state
+        HomeIntent.ScreenShown,
+        HomeIntent.OpenSettingsClicked -> state
 
         is HomeIntent.WeatherLoaded -> state.copy(
             isLoading = false,
@@ -115,26 +62,23 @@ class HomeViewModel @Inject constructor(
         )
 
         HomeIntent.WeatherLoadFailed -> state.copy(isLoading = false, hasError = true)
-
-        HomeIntent.OpenSettingsClicked -> state
     }
 
     override suspend fun handle(intent: HomeIntent) {
         when (intent) {
             HomeIntent.LoadInitial,
             HomeIntent.RefreshWeather,
-            HomeIntent.RetryClicked -> loadWeather()
-
-            is HomeIntent.CityQueryChanged -> Unit
-
-            is HomeIntent.SearchSubmitted -> {
-                searchJob?.cancel()
-                submitSearch(intent.query)
+            HomeIntent.RetryClicked -> {
+                loadedCity = App.setting.selectedCity
+                loadWeather(loadedCity)
             }
 
-            is HomeIntent.CityPicked -> {
-                _cityName.value = intent.city.title
-                dispatch(HomeIntent.RefreshWeather)
+            HomeIntent.ScreenShown -> {
+                // Город задаётся только в настройках: при возврате на главный экран
+                // сравниваем выбор с уже загруженным городом и перезапрашиваем погоду.
+                if (App.setting.selectedCity != loadedCity) {
+                    dispatch(HomeIntent.RefreshWeather)
+                }
             }
 
             HomeIntent.OpenSettingsClicked -> emitEffect(HomeEffect.NavigateToSettings)
@@ -143,10 +87,11 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun loadWeather() {
+    private fun loadWeather(city: GeoCity) {
         viewModelScope.launch {
-            runCatching { weatherService.getWeather(_cityName.value) }
+            runCatching { weatherService.getWeather(latitude = city.lat, longitude = city.lon) }
                 .onSuccess { weather ->
+                    if (city != loadedCity) return@onSuccess
                     val units = WeatherFormatter.unitSymbol(App.setting.appMetrics.metrics)
                     val windSymbol =
                         WeatherFormatter.windSpeedSymbol(App.setting.appMetrics.metrics)
@@ -154,8 +99,8 @@ class HomeViewModel @Inject constructor(
                     val sys = weather.sys
                     dispatch(
                         HomeIntent.WeatherLoaded(
-                            city = weather.name ?: _cityName.value,
-                            country = sys?.country.orEmpty(),
+                            city = weather.name ?: city.name,
+                            country = sys?.country ?: city.country.orEmpty(),
                             updatedAt = WeatherFormatter.formatDate(
                                 epochSeconds = weather.dt,
                                 pattern = DATE_PATTERN_UPDATE
@@ -181,40 +126,16 @@ class HomeViewModel @Inject constructor(
                             icon = weather.getWeatherIcon()
                         ),
                     )
-                    runCatching { App.setting.lastCityName = _cityName.value }
                 }
                 .onFailure {
+                    if (city != loadedCity) return@onFailure
                     dispatch(HomeIntent.WeatherLoadFailed)
                     emitEffect(HomeEffect.ShowNetworkError)
                 }
         }
     }
 
-    private fun submitSearch(query: String) {
-        if (query.length < MIN_QUERY_LENGTH || query == _lastQueried.value) return
-        _lastQueried.value = query
-        runCitySearch(query)
-    }
-
-    private fun runCitySearch(query: String) {
-        searchJob?.cancel()
-        searchJob = viewModelScope.launch {
-            runCatching { cityService.getCity(query) }
-                .onSuccess { city -> dispatch(HomeIntent.CitiesLoaded(persistentListOf(city))) }
-                .onFailure { t ->
-                    if (t is NoSuchElementException) {
-                        dispatch(HomeIntent.CitiesLoaded(persistentListOf()))
-                    } else {
-                        dispatch(HomeIntent.CitiesLoadFailed)
-                    }
-                }
-        }
-    }
-
     companion object {
-        const val DEFAULT_CITY = "London"
-        const val MIN_QUERY_LENGTH = 2
-        const val SEARCH_DEBOUNCE_MS = 1000L
         const val DATE_PATTERN_UPDATE = "dd/MM/yyyy hh:mm a"
         const val TIME_PATTERN = "hh:mm a"
 

@@ -9,7 +9,8 @@ import retrofit2.http.Query
 interface IWeather {
     @GET("weather")
     suspend fun getWeather(
-        @Query("q") cityName: String,
+        @Query("lat") latitude: Double,
+        @Query("lon") longitude: Double,
         @Query("lang") language: String = LanguageLogic.apiLangParam(App.setting.appLanguage.languageKey),
         @Query("units") units: String = App.setting.appMetrics.metrics,
     ): Weather

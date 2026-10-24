@@ -15,6 +15,11 @@
     <string name="change_data">Обновлены данные о погоде!</string>
     <string name="lang_app">Язык</string>
     <string name="temp_app">Температура</string>
+    <string name="city">Город</string>
+    <string name="city_search_hint">Название города</string>
+    <string name="city_not_found">Города не найдены</string>
+    <string name="city_search_error">Не удалось загрузить города. Проверьте соединение.</string>
+    <string name="close">Закрыть</string>
     <string name="mode_app">Темная тема</string>
     <string name="country_for_weather">Страна</string>
     <string name="about_dev">alex.prog.99</string>

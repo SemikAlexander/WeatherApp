@@ -15,6 +15,11 @@
     <string name="change_data">Datos meteorológicos actualizados!</string>
     <string name="lang_app">Idioma</string>
     <string name="temp_app">Temperatura</string>
+    <string name="city">Ciudad</string>
+    <string name="city_search_hint">Nombre de la ciudad</string>
+    <string name="city_not_found">No se encontraron ciudades</string>
+    <string name="city_search_error">No se pudieron cargar las ciudades. Comprueba la conexión.</string>
+    <string name="close">Cerrar</string>
     <string name="mode_app">Tema oscuro</string>
     <string name="country_for_weather">País</string>
     <string name="about_dev">alex.prog.99</string>

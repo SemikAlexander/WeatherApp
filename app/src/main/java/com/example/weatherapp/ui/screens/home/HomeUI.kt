@@ -63,7 +63,10 @@ object HomeUI {
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState()),
             ) {
-                TopBar(onOpenSettings = onOpenSettings)
+                TopBar(
+                    city = state.weather?.city.orEmpty(),
+                    onOpenSettings = onOpenSettings
+                )
                 SpacerHeight(36)
                 Row(
                     modifier = Modifier
@@ -302,13 +305,23 @@ object HomeUI {
     }
 
     @Composable
-    fun TopBar(onOpenSettings: () -> Unit) {
+    fun TopBar(
+        city: String,
+        onOpenSettings: () -> Unit
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+                .padding(horizontal = 24.dp, vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            Text(
+                text = city,
+                style = MaterialTheme.typography.bodyMedium,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.primary,
+            )
             Spacer(Modifier.weight(1f))
             Icon(
                 modifier = Modifier
@@ -353,7 +366,6 @@ object HomeUI {
 // region Previews
 
 private val PREVIEW_STATE = HomeState(
-    cityQuery = "London",
     weather = WeatherUi(
         city = "London",
         country = "GB",

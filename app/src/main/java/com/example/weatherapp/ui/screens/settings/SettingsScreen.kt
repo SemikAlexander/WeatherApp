@@ -26,10 +26,14 @@ fun SettingsScreen(
 
     SettingsUI.Root(
         state = state,
+        onOpenCity = { viewModel.dispatch(SettingsIntent.OpenCityDialogClicked) },
         onOpenLanguage = { viewModel.dispatch(SettingsIntent.OpenLanguageDialogClicked) },
         onOpenUnits = { viewModel.dispatch(SettingsIntent.OpenUnitsDialogClicked) },
         onBack = { viewModel.dispatch(SettingsIntent.BackClicked) },
         onExit = { viewModel.dispatch(SettingsIntent.ExitClicked) },
+        onCityPicked = { viewModel.dispatch(SettingsIntent.CityPicked(it)) },
+        onCityQueryChange = { viewModel.dispatch(SettingsIntent.CityQueryChanged(it)) },
+        onCitySearch = { viewModel.dispatch(SettingsIntent.CitySearchSubmitted) },
         onLanguagePicked = { viewModel.dispatch(SettingsIntent.LanguagePicked(it)) },
         onUnitsPicked = { viewModel.dispatch(SettingsIntent.UnitsPicked(it)) },
         onDismissDialog = { viewModel.dispatch(SettingsIntent.DialogDismissed) },

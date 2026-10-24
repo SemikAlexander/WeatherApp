@@ -2,6 +2,7 @@ package com.example.weatherapp.extention
 
 import android.content.Context
 import androidx.core.content.edit
+import com.example.weatherapp.api.models.response.geocoding.GeoCity
 import com.example.weatherapp.extention.Setting.Keys.MODE_OFF
 import com.example.weatherapp.extention.Setting.Keys.MODE_ON
 import com.example.weatherapp.extention.Setting.Keys.MODE_SYSTEM
@@ -36,9 +37,17 @@ class Setting(context: Context) {
         get() = pref.getInt(Keys.DAILY_COUNT, 16)
         set(value) = pref.edit { putInt(Keys.DAILY_COUNT, value) }
 
-    var lastCityName: String?
-        get() = pref.getString(Keys.LAST_CITY_NAME, null)
-        set(value) = pref.edit { putString(Keys.LAST_CITY_NAME, value) }
+    /**
+     * Город, выбранный в настройках. Хранится целиком (имя + координаты + страна),
+     * чтобы погода запрашивалась по координатам и не зависела от неоднозначности названия.
+     * При отсутствии/повреждении значения возвращается [GeoCity.DEFAULT].
+     */
+    var selectedCity: GeoCity
+        get() = runCatching {
+            pref.getString(Keys.SELECTED_CITY, null)
+                ?.let { Gson().fromJson(it, GeoCity::class.java) }
+        }.getOrNull() ?: GeoCity.DEFAULT
+        set(value) = pref.edit { putString(Keys.SELECTED_CITY, Gson().toJson(value)) }
 
     var darkModeEnabled: Boolean?
         get() = when (pref.getInt(Keys.DARK_MODE, MODE_SYSTEM)) {
@@ -61,7 +70,7 @@ class Setting(context: Context) {
         const val APPLICATION_LANGUAGE = "APPLICATION_LANGUAGE"
         const val APPLICATION_METRICS = "APPLICATION_METRICS"
         const val DAILY_COUNT = "DAILY_COUNT"
-        const val LAST_CITY_NAME = "LAST_CITY_NAME"
+        const val SELECTED_CITY = "SELECTED_CITY"
         const val DARK_MODE = "DARK_MODE"
 
         const val MODE_OFF = 0

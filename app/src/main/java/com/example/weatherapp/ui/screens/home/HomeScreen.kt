@@ -1,6 +1,7 @@
 package com.example.weatherapp.ui.screens.home
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -12,6 +13,10 @@ fun HomeScreen(
     onNetworkError: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.dispatch(HomeIntent.ScreenShown)
+    }
 
     LaunchedEffectUnit(viewModel.effects) { effect ->
         when (effect) {

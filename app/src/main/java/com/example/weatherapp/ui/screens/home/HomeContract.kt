@@ -1,22 +1,19 @@
 package com.example.weatherapp.ui.screens.home
 
-import com.example.weatherapp.api.models.response.cities.CitiesItem
 import com.example.weatherapp.mvi.IaEffect
 import com.example.weatherapp.mvi.IaIntent
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 
 sealed interface HomeIntent : IaIntent {
     data object LoadInitial : HomeIntent
+
+    /**
+     * Экран снова виден пользователю (первый показ и возврат из настроек).
+     * Нужен, чтобы подхватить город, изменённый в настройках.
+     */
+    data object ScreenShown : HomeIntent
     data object RefreshWeather : HomeIntent
-    data class CityQueryChanged(val query: String) : HomeIntent
-    data class SearchSubmitted(val query: String) : HomeIntent
-    data class CityPicked(val city: CitiesItem) : HomeIntent
     data object OpenSettingsClicked : HomeIntent
     data object RetryClicked : HomeIntent
-    data class CityInitialized(val city: String) : HomeIntent
-    data class CitiesLoaded(val cities: ImmutableList<CitiesItem>) : HomeIntent
-    data object CitiesLoadFailed : HomeIntent
 
     data class WeatherLoaded(
         val city: String,
@@ -41,9 +38,6 @@ sealed interface HomeIntent : IaIntent {
 data class HomeState(
     val isLoading: Boolean = false,
     val hasError: Boolean = false,
-    val cityQuery: String = "",
-    val suggestions: ImmutableList<CitiesItem> = persistentListOf(),
-    val isSuggestionsVisible: Boolean = false,
     val weather: WeatherUi? = null,
 ) {
     companion object {

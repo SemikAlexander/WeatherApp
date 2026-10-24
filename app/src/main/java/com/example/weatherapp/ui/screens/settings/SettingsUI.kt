@@ -5,12 +5,18 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -18,9 +24,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.weatherapp.R
+import com.example.weatherapp.api.models.response.geocoding.GeoCity
 import com.example.weatherapp.extention.models.ApplicationLanguage
 import com.example.weatherapp.extention.models.ApplicationMetrics
 import com.example.weatherapp.logic.WeatherFormatter
@@ -39,10 +47,14 @@ object SettingsUI {
     @Composable
     fun Root(
         state: SettingsState,
+        onOpenCity: () -> Unit,
         onOpenLanguage: () -> Unit,
         onOpenUnits: () -> Unit,
         onBack: () -> Unit,
         onExit: () -> Unit,
+        onCityPicked: (GeoCity) -> Unit,
+        onCityQueryChange: (String) -> Unit,
+        onCitySearch: () -> Unit,
         onLanguagePicked: (ApplicationLanguage) -> Unit,
         onUnitsPicked: (ApplicationMetrics) -> Unit,
         onDismissDialog: () -> Unit,
@@ -77,6 +89,11 @@ object SettingsUI {
                         .verticalScroll(rememberScrollState())
                 ) {
                     SettingsRow(
+                        title = stringResource(R.string.city),
+                        value = state.cityLabel,
+                        onClick = onOpenCity,
+                    )
+                    SettingsRow(
                         title = stringResource(R.string.lang_app),
                         value = state.languageLabel,
                         onClick = onOpenLanguage,
@@ -102,6 +119,18 @@ object SettingsUI {
             }
 
             when (state.activeDialog) {
+                SettingsDialog.CITY -> CityDialog(
+                    query = state.cityQuery,
+                    cities = state.citySuggestions,
+                    selectedCity = state.currentCity,
+                    isSearching = state.isCitySearching,
+                    hasError = state.citySearchFailed,
+                    onQueryChange = onCityQueryChange,
+                    onSearch = onCitySearch,
+                    onPick = onCityPicked,
+                    onDismiss = onDismissDialog,
+                )
+
                 SettingsDialog.LANGUAGE -> SelectionDialog(
                     title = stringResource(R.string.lang_app),
                     items = state.languages.map {
@@ -152,6 +181,85 @@ object SettingsUI {
         }
     }
 
+    /**
+     * Диалог выбора города: live-поиск по мере ввода (с debounce в ViewModel)
+     * и отправка запроса клавишей Search на клавиатуре.
+     */
+    @Composable
+    fun CityDialog(
+        query: String,
+        cities: ImmutableList<GeoCity>,
+        selectedCity: GeoCity?,
+        isSearching: Boolean,
+        hasError: Boolean,
+        onQueryChange: (String) -> Unit,
+        onSearch: () -> Unit,
+        onPick: (GeoCity) -> Unit,
+        onDismiss: () -> Unit,
+    ) {
+        AlertDialog(
+            onDismissRequest = onDismiss,
+            confirmButton = {
+                TextButton(onClick = onDismiss) {
+                    Text(stringResource(R.string.close))
+                }
+            },
+            title = { Text(stringResource(R.string.city)) },
+            text = {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    OutlinedTextField(
+                        value = query,
+                        onValueChange = onQueryChange,
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        placeholder = { Text(stringResource(R.string.city_search_hint)) },
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                        keyboardActions = KeyboardActions(onSearch = { onSearch() }),
+                        trailingIcon = {
+                            if (isSearching) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(20.dp),
+                                    strokeWidth = 2.dp,
+                                )
+                            }
+                        },
+                    )
+                    SpacerHeight(8)
+                    when {
+                        hasError -> Text(
+                            text = stringResource(R.string.city_search_error),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.padding(vertical = 8.dp),
+                        )
+
+                        cities.isEmpty() && !isSearching &&
+                            query.trim().length >= SettingsViewModel.MIN_CITY_QUERY_LENGTH -> Text(
+                            text = stringResource(R.string.city_not_found),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.secondary,
+                            modifier = Modifier.padding(vertical = 8.dp),
+                        )
+
+                        else -> Column(
+                            modifier = Modifier
+                                .heightIn(max = 280.dp)
+                                .verticalScroll(rememberScrollState()),
+                        ) {
+                            cities.forEach { city ->
+                                SelectableItemRow(
+                                    name = city.displayName,
+                                    isSelected = city == selectedCity,
+                                    onClick = { onPick(city) },
+                                )
+                            }
+                        }
+                    }
+                }
+            },
+        )
+    }
+
     @Composable
     fun SelectionDialog(
         title: String,
@@ -195,10 +303,18 @@ object SettingsUI {
 
 // region Previews
 
+private val PREVIEW_CITIES = persistentListOf(
+    GeoCity("London", 51.5073219, -0.1276474, "GB", "England"),
+    GeoCity("London", 42.9832406, -81.243372, "CA", "Ontario"),
+    GeoCity("Londonderry", 42.865087, -71.37395, "US", "New Hampshire"),
+)
+
 private val PREVIEW_SETTINGS_STATE = SettingsState(
     languageLabel = "English, EN",
     unitsLabel = "Celsius, °C",
     versionLabel = "1.0.0",
+    cityLabel = "London, England, GB",
+    currentCity = GeoCity.DEFAULT,
     currentLanguage = ApplicationLanguage("English", "EN"),
     currentMetrics = ApplicationMetrics("metric", "C"),
     languages = persistentListOf(
@@ -206,6 +322,12 @@ private val PREVIEW_SETTINGS_STATE = SettingsState(
         ApplicationLanguage("Russian", "RU"),
     ),
     metricsOptions = ApplicationMetrics.getMetricsList(),
+)
+
+private val PREVIEW_CITY_DIALOG_STATE = PREVIEW_SETTINGS_STATE.copy(
+    activeDialog = SettingsDialog.CITY,
+    cityQuery = "London",
+    citySuggestions = PREVIEW_CITIES,
 )
 
 // region LIGHT THEME
@@ -216,10 +338,14 @@ private fun SettingsScreenPreview() {
     WeatherAppTheme {
         SettingsUI.Root(
             state = PREVIEW_SETTINGS_STATE,
+            onOpenCity = {},
             onOpenLanguage = {},
             onOpenUnits = {},
             onBack = {},
             onExit = {},
+            onCityPicked = {},
+            onCityQueryChange = {},
+            onCitySearch = {},
             onLanguagePicked = {},
             onUnitsPicked = {},
             onDismissDialog = {},
@@ -233,10 +359,35 @@ private fun SettingsDialogPreview() {
     WeatherAppTheme {
         SettingsUI.Root(
             state = PREVIEW_SETTINGS_STATE.copy(activeDialog = SettingsDialog.LANGUAGE),
+            onOpenCity = {},
             onOpenLanguage = {},
             onOpenUnits = {},
             onBack = {},
             onExit = {},
+            onCityPicked = {},
+            onCityQueryChange = {},
+            onCitySearch = {},
+            onLanguagePicked = {},
+            onUnitsPicked = {},
+            onDismissDialog = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CityDialogPreview() {
+    WeatherAppTheme {
+        SettingsUI.Root(
+            state = PREVIEW_CITY_DIALOG_STATE,
+            onOpenCity = {},
+            onOpenLanguage = {},
+            onOpenUnits = {},
+            onBack = {},
+            onExit = {},
+            onCityPicked = {},
+            onCityQueryChange = {},
+            onCitySearch = {},
             onLanguagePicked = {},
             onUnitsPicked = {},
             onDismissDialog = {},
@@ -254,10 +405,14 @@ private fun SettingsScreenDarkPreview() {
     WeatherAppTheme(darkTheme = true) {
         SettingsUI.Root(
             state = PREVIEW_SETTINGS_STATE,
+            onOpenCity = {},
             onOpenLanguage = {},
             onOpenUnits = {},
             onBack = {},
             onExit = {},
+            onCityPicked = {},
+            onCityQueryChange = {},
+            onCitySearch = {},
             onLanguagePicked = {},
             onUnitsPicked = {},
             onDismissDialog = {},
@@ -271,10 +426,35 @@ private fun SettingsDialogDarkPreview() {
     WeatherAppTheme(darkTheme = true) {
         SettingsUI.Root(
             state = PREVIEW_SETTINGS_STATE.copy(activeDialog = SettingsDialog.LANGUAGE),
+            onOpenCity = {},
             onOpenLanguage = {},
             onOpenUnits = {},
             onBack = {},
             onExit = {},
+            onCityPicked = {},
+            onCityQueryChange = {},
+            onCitySearch = {},
+            onLanguagePicked = {},
+            onUnitsPicked = {},
+            onDismissDialog = {},
+        )
+    }
+}
+
+@Preview(name = "Dark", showBackground = true)
+@Composable
+private fun CityDialogDarkPreview() {
+    WeatherAppTheme(darkTheme = true) {
+        SettingsUI.Root(
+            state = PREVIEW_CITY_DIALOG_STATE,
+            onOpenCity = {},
+            onOpenLanguage = {},
+            onOpenUnits = {},
+            onBack = {},
+            onExit = {},
+            onCityPicked = {},
+            onCityQueryChange = {},
+            onCitySearch = {},
             onLanguagePicked = {},
             onUnitsPicked = {},
             onDismissDialog = {},

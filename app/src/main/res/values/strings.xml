@@ -14,6 +14,11 @@
     <string name="change_data">Weather data updated!</string>
     <string name="lang_app">Language</string>
     <string name="temp_app">Temperature</string>
+    <string name="city">City</string>
+    <string name="city_search_hint">City name</string>
+    <string name="city_not_found">No cities found</string>
+    <string name="city_search_error">Failed to load cities. Check your connection.</string>
+    <string name="close">Close</string>
     <string name="mode_app">Dark theme</string>
     <string name="country_for_weather">Country</string>
     <string name="about_dev">alex.prog.99</string>

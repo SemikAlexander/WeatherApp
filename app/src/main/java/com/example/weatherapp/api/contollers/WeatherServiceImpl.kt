@@ -9,9 +9,10 @@ import javax.inject.Singleton
 @Singleton
 class WeatherServiceImpl @Inject constructor() : IWeather {
     override suspend fun getWeather(
-        cityName: String,
+        latitude: Double,
+        longitude: Double,
         language: String,
         units: String,
     ): Weather = weatherRetrofit.create(IWeather::class.java)
-        .getWeather(cityName = cityName, language = language, units = units)
+        .getWeather(latitude = latitude, longitude = longitude, language = language, units = units)
 }

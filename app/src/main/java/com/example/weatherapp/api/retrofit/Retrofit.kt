@@ -17,10 +17,10 @@ private fun loggingInterceptor(): HttpLoggingInterceptor =
         }
     }
 
-private fun baseClient(withAppInterceptor: Boolean): OkHttpClient =
+private fun baseClient(): OkHttpClient =
     OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor())
-        .apply { if (withAppInterceptor) addInterceptor(AppInterceptor()) }
+        .addInterceptor(AppInterceptor())
         .connectTimeout(ApiConfig.CLIENT_TIME_OUT_SECONDS, TimeUnit.SECONDS)
         .readTimeout(ApiConfig.CLIENT_TIME_OUT_SECONDS, TimeUnit.SECONDS)
         .build()
@@ -29,14 +29,14 @@ val weatherRetrofit: Retrofit by lazy {
     Retrofit.Builder()
         .baseUrl(ApiConfig.WEATHER_BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
-        .client(baseClient(withAppInterceptor = true))
+        .client(baseClient())
         .build()
 }
 
-val cityRetrofit: Retrofit by lazy {
+val geocodingRetrofit: Retrofit by lazy {
     Retrofit.Builder()
-        .baseUrl(ApiConfig.CITY_BASE_URL)
+        .baseUrl(ApiConfig.GEOCODING_BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
-        .client(baseClient(withAppInterceptor = false))
+        .client(baseClient())
         .build()
 }

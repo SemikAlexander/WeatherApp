@@ -1,8 +1,8 @@
 package com.example.weatherapp.di
 
-import com.example.weatherapp.api.contollers.CityServiceImpl
+import com.example.weatherapp.api.contollers.GeocodingServiceImpl
 import com.example.weatherapp.api.contollers.WeatherServiceImpl
-import com.example.weatherapp.api.interfaces.ICity
+import com.example.weatherapp.api.interfaces.IGeocoding
 import com.example.weatherapp.api.interfaces.IWeather
 import dagger.Module
 import dagger.Provides
@@ -20,5 +20,5 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideCityService(): ICity = CityServiceImpl()
+    fun provideGeocodingService(): IGeocoding = GeocodingServiceImpl()
 }

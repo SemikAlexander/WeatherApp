@@ -42,11 +42,7 @@ object Routes {
  * MVI-эффекты ViewModel остаются чистыми от Android-зависимостей.
  */
 @Composable
-fun AppNavHost() {
-    WeatherAppTheme {
-        RootNavHost()
-    }
-}
+fun AppNavHost() = WeatherAppTheme { RootNavHost() }
 
 @Composable
 private fun RootNavHost() {

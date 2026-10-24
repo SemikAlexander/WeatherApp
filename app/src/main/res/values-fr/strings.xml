@@ -15,6 +15,11 @@
     <string name="change_data">Données météo mises à jour!</string>
     <string name="lang_app">Langue</string>
     <string name="temp_app">Température</string>
+    <string name="city">Ville</string>
+    <string name="city_search_hint">Nom de la ville</string>
+    <string name="city_not_found">Aucune ville trouvée</string>
+    <string name="city_search_error">Impossible de charger les villes. Vérifiez la connexion.</string>
+    <string name="close">Fermer</string>
     <string name="mode_app">Thème sombre</string>
     <string name="country_for_weather">Pays</string>
     <string name="about_dev">alex.prog.99</string>
