@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        Системный стартовый экран (Android 12+) в тёмной системной теме.
+        После запуска MainActivity применит сохранённый выбор пользователя.
+    -->
+    <style name="Theme.WeatherApp" parent="@style/Theme.WeatherApp.Dark" />
+</resources>

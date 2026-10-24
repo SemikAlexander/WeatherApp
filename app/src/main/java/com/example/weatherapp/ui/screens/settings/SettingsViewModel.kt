@@ -9,8 +9,11 @@ import com.example.weatherapp.api.interfaces.IGeocoding
 import com.example.weatherapp.extention.models.ApplicationMetrics
 import com.example.weatherapp.logic.LanguageLogic
 import com.example.weatherapp.logic.WeatherFormatter
+import com.example.weatherapp.logic.isDarkThemeSelected
+import com.example.weatherapp.logic.syncApplicationNightMode
 import com.example.weatherapp.mvi.MviViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CancellationException
@@ -28,6 +31,7 @@ import kotlin.time.Duration.Companion.milliseconds
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val geocodingService: IGeocoding,
+    @param:ApplicationContext private val context: Context,
 ) : MviViewModel<SettingsIntent, SettingsState, SettingsEffect>() {
     companion object {
         const val MIN_CITY_QUERY_LENGTH = 2
@@ -76,7 +80,7 @@ class SettingsViewModel @Inject constructor(
                     currentMetrics = metrics,
                     languages = LanguageLogic.availableLanguages(),
                     metricsOptions = ApplicationMetrics.getMetricsList(),
-                    isDarkMode = App.setting.darkModeEnabled ?: false,
+                    isDarkMode = isDarkThemeSelected(context),
                     activeDialog = SettingsDialog.NONE,
                     cityQuery = "",
                     citySuggestions = persistentListOf(),
@@ -199,6 +203,7 @@ class SettingsViewModel @Inject constructor(
             is SettingsIntent.DarkModeToggled -> {
                 if (App.setting.darkModeEnabled != intent.enabled) {
                     App.setting.darkModeEnabled = intent.enabled
+                    syncApplicationNightMode(context, intent.enabled)
                     emitEffect(SettingsEffect.RestartForTheme)
                 }
             }

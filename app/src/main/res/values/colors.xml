@@ -3,4 +3,10 @@
     <color name="white">#FFFFFFFF</color>
     <color name="blue2">#006485</color>
     <color name="blue1">#0099CC</color>
+
+    <!-- Стартовое окно: цвета совпадают с фоном Compose-темы. -->
+    <color name="start_background_light">#FFFFFFFF</color>
+    <color name="start_background_dark">#FF212121</color>
+    <color name="start_primary_light">#FF757575</color>
+    <color name="start_primary_dark">#FFFFFFFF</color>
 </resources>

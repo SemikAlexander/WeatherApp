@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="Theme.WeatherApp" parent="android:Theme.Material.NoActionBar">
-        <item name="android:colorPrimary">@color/blue2</item>
-        <item name="android:colorPrimaryDark">@color/blue1</item>
-        <item name="android:windowBackground">@color/blue2</item>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.WeatherApp" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:colorPrimary">@color/start_primary_light</item>
+        <item name="android:colorPrimaryDark">@color/start_background_light</item>
+        <item name="android:windowBackground">@color/start_background_light</item>
+        <item name="android:windowSplashScreenBackground" tools:targetApi="31">@color/start_background_light</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="Theme.WeatherApp.Dark" parent="android:Theme.Material.NoActionBar">
+        <item name="android:colorPrimary">@color/start_primary_dark</item>
+        <item name="android:colorPrimaryDark">@color/start_background_dark</item>
+        <item name="android:windowBackground">@color/start_background_dark</item>
+        <item name="android:windowSplashScreenBackground" tools:targetApi="31">@color/start_background_dark</item>
         <item name="android:windowFullscreen">true</item>
     </style>
 </resources>

@@ -1,16 +1,16 @@
 package com.example.weatherapp.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.example.weatherapp.App
+import com.example.weatherapp.logic.isDarkThemeSelected
 
 val c212121 = Color(0xFF212121)
 val c323233 = Color(0xFF323233)
@@ -43,10 +43,7 @@ private val WeatherTypography = Typography(
 )
 
 @Composable
-fun resolveDarkTheme(): Boolean {
-    val stored = runCatching { App.setting.darkModeEnabled }.getOrNull()
-    return stored ?: isSystemInDarkTheme()
-}
+fun resolveDarkTheme(): Boolean = isDarkThemeSelected(LocalContext.current)
 
 @Composable
 fun WeatherAppTheme(

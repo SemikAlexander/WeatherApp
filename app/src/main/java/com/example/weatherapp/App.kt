@@ -1,9 +1,8 @@
 package com.example.weatherapp
 
 import android.app.Application
-import android.app.LocaleManager
-import android.content.res.Configuration
 import com.example.weatherapp.extention.Setting
+import com.example.weatherapp.logic.syncApplicationNightMode
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
@@ -15,5 +14,6 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         setting = Setting(applicationContext)
+        syncApplicationNightMode(this, setting.darkModeEnabled)
     }
 }
