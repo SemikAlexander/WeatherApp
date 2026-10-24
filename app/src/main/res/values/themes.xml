@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--
-        Base application theme. Compose-экраны рисуют собственную Material3-тему
-        (WeatherAppTheme); этот стиль нужен только для стартового окна Activity
-        (фон до первой композиции). Parent — платформенный android:Theme.Material.*:
-        не требует appcompat/material в classpath после удаления View-библиотек.
-    -->
     <style name="Theme.WeatherApp" parent="android:Theme.Material.NoActionBar">
         <item name="android:colorPrimary">@color/blue2</item>
         <item name="android:colorPrimaryDark">@color/blue1</item>
