@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">WeatherApp</string>
+    <string name="app_name">Temps</string>
     <string name="sunrise">Lever</string>
     <string name="sunset">Coucher</string>
     <string name="wind">Vent</string>
