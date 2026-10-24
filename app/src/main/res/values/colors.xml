@@ -9,4 +9,12 @@
     <color name="start_background_dark">#FF212121</color>
     <color name="start_primary_light">#FF757575</color>
     <color name="start_primary_dark">#FFFFFFFF</color>
+
+    <!-- Виджет: цвета выбираются в провайдере по теме приложения. -->
+    <color name="widget_background_light">#FFF9F9FA</color>
+    <color name="widget_background_dark">#FF323233</color>
+    <color name="widget_text_primary_light">#FF212121</color>
+    <color name="widget_text_primary_dark">#FFFFFFFF</color>
+    <color name="widget_text_secondary_light">#FF757575</color>
+    <color name="widget_text_secondary_dark">#FF9E9E9E</color>
 </resources>

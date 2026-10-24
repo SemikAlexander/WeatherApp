@@ -42,6 +42,11 @@
     <string name="forecast_in_12_hours">+12 ч</string>
     <string name="forecast_in_24_hours">+24 ч</string>
 
+    <!-- WIDGET -->
+    <string name="widget_label">Виджет погоды</string>
+    <string name="widget_description">Текущая погода</string>
+    <string name="widget_no_data">Нет данных</string>
+
     <string name="internet_error">Связь с интернетом потеряна.</string>
 
     <string name="fahrenheit">Фаренгейт</string>

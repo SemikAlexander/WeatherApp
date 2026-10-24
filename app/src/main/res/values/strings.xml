@@ -41,6 +41,11 @@
     <string name="forecast_in_12_hours">+12 h</string>
     <string name="forecast_in_24_hours">+24 h</string>
 
+    <!-- WIDGET -->
+    <string name="widget_label">Weather widget</string>
+    <string name="widget_description">Current weather</string>
+    <string name="widget_no_data">No data</string>
+
     <string name="internet_error">The connection to the Internet is lost.</string>
 
     <string name="fahrenheit">Fahrenheit</string>

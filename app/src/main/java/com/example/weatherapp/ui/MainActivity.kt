@@ -1,10 +1,13 @@
 package com.example.weatherapp.ui
 
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
@@ -14,6 +17,7 @@ import com.example.weatherapp.App
 import com.example.weatherapp.R
 import com.example.weatherapp.logic.LanguageLogic
 import com.example.weatherapp.logic.isDarkThemeSelected
+import com.example.weatherapp.widget.WeatherWidgetProvider
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 
@@ -58,6 +62,17 @@ class MainActivity : ComponentActivity() {
         )
 
         setContent { AppNavHost() }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val appWidgetManager = getSystemService(AppWidgetManager::class.java)
+            if (appWidgetManager.isRequestPinAppWidgetSupported) {
+                appWidgetManager.requestPinAppWidget(
+                    ComponentName(this, WeatherWidgetProvider::class.java),
+                    null,
+                    null,
+                )
+            }
+        }
     }
 
     override fun onNewIntent(intent: Intent) {

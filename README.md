@@ -37,6 +37,15 @@
 
 На API < 31 системный splash может использовать системную тему, но окно приложения всё равно перекрашивается в выбранную.
 
+### Виджет
+
+Добавлен домашний виджет (`widget/WeatherWidgetProvider`, 4×2, изменяемый по размеру). Показывает те же значения, что верхний блок Home: температуру, описание, время обновления и иконку.
+
+- данные запрашиваются у того же `IWeather` по городу из `Setting.selectedCity`; иконка скачивается в `Bitmap`, потому что RemoteViews не умеет работать с Coil/URL напрямую;
+- обновление раз в 30 минут (`updatePeriodMillis`) и дополнительно после смены города, единиц, языка или темы в настройках (`WeatherWidgetProvider.requestUpdate`);
+- цвета карточки берутся из выбранной темы приложения; при ошибке сети виджет сохраняет последнюю успешную картинку;
+- доступ к Hilt-зависимостям — через `WeatherWidgetEntryPoint` (`EntryPointAccessors`), так как `AppWidgetProvider` не является Activity.
+
 ---
 
 ## Архитектура
@@ -81,6 +90,7 @@ com.example.weatherapp
 ├── extention/      // Setting (SharedPreferences), расширения, ApplicationLanguage/ApplicationMetrics
 ├── logic/          // Чистая логика: LanguageLogic, WeatherFormatter (unit-тестируется без Android)
 ├── mvi/            // Базовый MVI-каркас
+├── widget/         // AppWidgetProvider текущей погоды (RemoteViews)
 └── ui/             // MainActivity, AppNavHost, theme/, components/, screens/{home,settings}/
 ```
 

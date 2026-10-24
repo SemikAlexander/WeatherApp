@@ -12,6 +12,7 @@ import com.example.weatherapp.logic.WeatherFormatter
 import com.example.weatherapp.logic.isDarkThemeSelected
 import com.example.weatherapp.logic.syncApplicationNightMode
 import com.example.weatherapp.mvi.MviViewModel
+import com.example.weatherapp.widget.WeatherWidgetProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.collections.immutable.persistentListOf
@@ -182,7 +183,10 @@ class SettingsViewModel @Inject constructor(
                 if (query.length >= MIN_CITY_QUERY_LENGTH) searchCities(query)
             }
 
-            is SettingsIntent.CityPicked -> App.setting.selectedCity = intent.city
+            is SettingsIntent.CityPicked -> {
+                App.setting.selectedCity = intent.city
+                WeatherWidgetProvider.requestUpdate(context)
+            }
 
             SettingsIntent.DialogDismissed -> {
                 citySearchJob?.cancel()
@@ -193,17 +197,21 @@ class SettingsViewModel @Inject constructor(
             is SettingsIntent.LanguagePicked -> {
                 if (App.setting.appLanguage != intent.language) {
                     App.setting.appLanguage = intent.language
+                    WeatherWidgetProvider.requestUpdate(context)
                     emitEffect(SettingsEffect.RestartForLocale)
                 }
             }
 
-            is SettingsIntent.UnitsPicked ->
+            is SettingsIntent.UnitsPicked -> {
                 App.setting.appMetrics = intent.metrics
+                WeatherWidgetProvider.requestUpdate(context)
+            }
 
             is SettingsIntent.DarkModeToggled -> {
                 if (App.setting.darkModeEnabled != intent.enabled) {
                     App.setting.darkModeEnabled = intent.enabled
                     syncApplicationNightMode(context, intent.enabled)
+                    WeatherWidgetProvider.requestUpdate(context)
                     emitEffect(SettingsEffect.RestartForTheme)
                 }
             }
